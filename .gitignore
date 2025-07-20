@@ -45,3 +45,4 @@ nativewind-env.d.ts
 # Firebase
 google-services.json
 GoogleService-Info.plist
+/app/generated/prisma

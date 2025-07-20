@@ -1,4 +1,4 @@
-import '@/firebase';
+import '@/services/firebase';
 import { FirebaseError } from 'firebase/app';
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';

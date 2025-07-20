@@ -1,4 +1,5 @@
-import '@/firebase';
+import '@/services/firebase';
+import axios from 'axios';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { useEffect, useState } from 'react';
@@ -12,7 +13,6 @@ export default function RootLayout() {
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
-			console.log('onAuthStateChanged', user);
 			setUser(user);
 			if (initializing) setInitializing(false);
 		});
@@ -21,9 +21,26 @@ export default function RootLayout() {
 	}, []);
 
 	useEffect(() => {
+		const syncUser = async () => {
+			if (!user) return;
+
+			try {
+				await axios.post('https://<your-backend>/api/sync-user', {
+					uid: user.uid,
+					email: user.email,
+				});
+			} catch (error) {
+				console.error('Error syncing user with backend:', error);
+			}
+		};
+
+		syncUser();
+	}, [user]);
+
+	useEffect(() => {
 		if (initializing) return;
 
-		const inAuthGroup = segments[0] === '(auth)';
+		const inAuthGroup = segments[0]?.startsWith('(auth)');
 
 		if (!user && inAuthGroup) {
 			router.replace('/');
