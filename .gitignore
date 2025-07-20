@@ -39,4 +39,9 @@ yarn-error.*
 app-example
 .env
 
+# NativeWind
 nativewind-env.d.ts
+
+# Firebase
+google-services.json
+GoogleService-Info.plist

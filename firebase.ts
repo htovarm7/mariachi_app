@@ -1,6 +1,5 @@
 import Constants from 'expo-constants';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getApp, getApps, initializeApp } from 'firebase/app';
 
 const extra = Constants.expoConfig?.extra ?? {};
 
@@ -22,7 +21,7 @@ const firebaseConfig = {
   appId: firebaseAppId,
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-export { auth };
+export { app };
+

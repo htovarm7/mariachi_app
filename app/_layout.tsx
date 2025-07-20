@@ -1,29 +1,49 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import '@/firebase';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+	const [initializing, setInitializing] = useState(true);
+	const [user, setUser] = useState<User | null>(null);
+	const router = useRouter();
+	const segments = useSegments();
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
+			console.log('onAuthStateChanged', user);
+			setUser(user);
+			if (initializing) setInitializing(false);
+		});
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+		return unsubscribe;
+	}, []);
+
+	useEffect(() => {
+		if (initializing) return;
+
+		const inAuthGroup = segments[0] === '(auth)';
+
+		if (!user && inAuthGroup) {
+			router.replace('/');
+		} else if (user && !inAuthGroup) {
+			router.replace('/(auth)/home');
+		}
+	}, [user, initializing]);
+
+	if (initializing) {
+		return (
+			<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+				<ActivityIndicator size="large" />
+			</View>
+		);
+	}
+
+	return (
+		<Stack>
+			<Stack.Screen name="index" options={{ title: 'Login' }} />
+			<Stack.Screen name="(auth)" options={{ headerShown: false }} />
+		</Stack>
+	);
 }
