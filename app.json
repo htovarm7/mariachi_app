@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "mariachi_app",
+    "name": "Mariachi_app",
     "slug": "mariachi_app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "",
+    "icon": "assets/icons/Icon.png",
     "scheme": "mariachi_app",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -29,7 +29,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "",
+          "image": "assets/images/Splash.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
