@@ -1,20 +1,12 @@
-import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-SplashScreen.preventAutoHideAsync();
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import "react-native-reanimated";
+import "../global.css";
 
 export default function RootLayout() {
   const [loaded] = useFonts({
-    FunnelSans: require('../assets/fonts/FunnelSans-Regular.ttf'),
+    FunnelSans: require("../assets/fonts/FunnelSans-Regular.ttf"),
   });
-
-  useEffect(() => {
-    if (!loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
 
   if (!loaded) {
     return null;
@@ -22,7 +14,8 @@ export default function RootLayout() {
 
   return (
     <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );
