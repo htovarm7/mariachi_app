@@ -3,6 +3,15 @@ import { SplashScreen, Stack } from "expo-router";
 import "react-native-reanimated";
 import "../global.css";
 import { useEffect } from "react";
+import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
+import { Slot } from "expo-router";
+import { tokenCache } from '@clerk/clerk-expo/token-cache'
+
+function RootLayoutNav() {
+  return (
+
+  );
+}
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,10 +36,14 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(root)" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-    </Stack>
+    <ClerkProvider tokenCache={tokenCache}>
+      <ClerkLoaded>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(root)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        </Stack>
+      </ClerkLoaded>
+    </ClerkProvider>
   );
 }
