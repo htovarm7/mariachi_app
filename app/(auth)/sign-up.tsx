@@ -4,23 +4,31 @@ import * as React from "react";
 import OAuth from "@/components/OAuth";
 import { Link, useRouter } from "expo-router";
 import { useState } from "react";
-import { Text, ScrollView, View, Image } from "react-native";
+import { Text, ScrollView, View, Image, Alert } from "react-native";
+import ReactNativeModal from "react-native-modal";
 import { useSignUp } from "@clerk/clerk-expo";
 
 const SignUp = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
+  const [emailAddress, setEmailAddress] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [pendingVerification, setPendingVerification] = React.useState(false);
+  const [code, setCode] = React.useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
   });
 
+  const [showSuccessModal, setSuccessModal] = useState(false);
+
   const [verification, setVerification] = useState({
     state: "default",
     error: "",
     code: "",
   });
+
   const onSignUpPress = async () => {
     if (!isLoaded) return;
 
@@ -31,72 +39,42 @@ const SignUp = () => {
       });
 
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-
       setVerification({ ...verification, state: "pending" });
-    } catch (err) {
-      console.error(JSON.stringify(err, null, 2));
+    } catch (err: any) {
+      Alert.alert("Error", err.errors[0].longMessage);
     }
   };
-import * as React from 'react'
-import { Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { useSignUp } from '@clerk/clerk-expo'
-import { Link, useRouter } from 'expo-router'
-
-export default function SignUpScreen() {
-  const { isLoaded, signUp, setActive } = useSignUp()
-  const router = useRouter()
-
-  const [emailAddress, setEmailAddress] = React.useState('')
-  const [password, setPassword] = React.useState('')
-  const [pendingVerification, setPendingVerification] = React.useState(false)
-  const [code, setCode] = React.useState('')
-
-  // Handle submission of sign-up form
-  const onSignUpPress = async () => {
-    if (!isLoaded) return
-
-    // Start sign-up process using email and password provided
-    try {
-      await signUp.create({
-        emailAddress,
-        password,
-      })
-
-      // Send user an email with verification code
-      await signUp.prepareEmailAddressVerification({ strategy: 'email_code' })
-
-      // Set 'pendingVerification' to true to display second form
-      // and capture OTP code
-      setPendingVerification(true)
-    } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
-      console.error(JSON.stringify(err, null, 2))
-    }
-  }
 
   const onVerifyPress = async () => {
     if (!isLoaded) return;
 
     try {
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
-        code: verification.code
-      })
+        code: verification.code,
+      });
 
-      if (signUpAttempt.status === 'complete') {
+      if (signUpAttempt.status === "complete") {
         // TODO: Create a db user
-        await setActive({ session: signUpAttempt.createdSessionId })
-        setVerification({...verification, state: "sucess"})
-        router.replace('/')
+        await setActive({ session: signUpAttempt.createdSessionId });
+        setVerification({ ...verification, state: "success" });
+        // router.replace("/");
       } else {
-        setVerification({...verification, state: "failed", error: "Verification failed",})
-        console.error(JSON.stringify(signUpAttempt, null, 2))
+        setVerification({
+          ...verification,
+          state: "failed",
+          error: "Verification failed",
+        });
+        console.error(JSON.stringify(signUpAttempt, null, 2));
       }
     } catch (err: any) {
-      setVerification({...verification, state: "failed", error: err.err[0].longMessage,})
-      console.error(JSON.stringify(err, null, 2))
+      setVerification({
+        ...verification,
+        state: "failed",
+        error: err.err[0].longMessage,
+      });
+      console.error(JSON.stringify(err, null, 2));
     }
-  }
+  };
 
   return (
     <ScrollView className="flex-1 bg-white">
@@ -149,7 +127,63 @@ export default function SignUpScreen() {
           </Link>
         </View>
 
-        {/* Verifcation Mode*/}
+        <ReactNativeModal
+          isVisible={verification.state === "pending"}
+          onModalHide={() => {
+            if (verification.state === "success") setSuccessModal(true);
+          }}
+        >
+          <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
+            <Text className="text-2xl font-FunnelSansExtraBold mb-2">
+              Verification
+            </Text>
+            <Text className="font-FunnelSans mb-5">
+              We've sent a verification code to {form.email}
+            </Text>
+            <InputField
+              label="Code"
+              icon={null}
+              placeholder="12345"
+              value={verification.code}
+              keyboardType="numeric"
+              onChangeText={(code) =>
+                setVerification({ ...verification, code })
+              }
+            />
+
+            {verification.error && (
+              <Text className="text-red-500 text-sm mt-1">
+                {verification.error}
+              </Text>
+            )}
+
+            <CustomButton
+              title="Verify Email"
+              onPress={onVerifyPress}
+              className="mt-5 bg-success-500"
+            />
+          </View>
+        </ReactNativeModal>
+
+        <ReactNativeModal isVisible={showSuccessModal}>
+          <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
+            <Image source={null} className="w-[110px] h-[110px] mx-auto my-5" />
+            <Text className="text-3xl font-FunnelSansBold text-center">
+              Verified
+            </Text>
+            <Text className="text-base text-gray-400 font-FunnelSans text-center mt-2">
+              You have successfully verified your account
+            </Text>
+            <CustomButton
+              title="Browse Home"
+              onPress={() => {
+                setSuccessModal(false);
+                router.replace("/(root)/(tabs)/home");
+              }}
+              className="mt-5"
+            />
+          </View>
+        </ReactNativeModal>
       </View>
     </ScrollView>
   );

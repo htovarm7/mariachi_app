@@ -8,6 +8,11 @@
     "scheme": "mariachiapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/Splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#2f80ed"
+    },
     "ios": {
       "supportsTablet": true
     },
