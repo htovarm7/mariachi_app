@@ -1,13 +1,18 @@
 {
   "expo": {
-    "name": "Mariachi_app",
-    "slug": "mariachi_app",
+    "name": "mariachi_app",
+    "slug": "mariachi-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "assets/icons/Icon.png",
-    "scheme": "mariachi_app",
+    "icon": "./assets/icons/icon.png",
+    "scheme": "mariachiapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/Splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#2f80ed"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -16,8 +21,7 @@
         "foregroundImage": "",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.lalomora06.mariachi_app"
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "bundler": "metro",
@@ -29,15 +33,23 @@
       [
         "expo-splash-screen",
         {
-          "image": "assets/images/Splash.png",
+          "image": "./assets/images/Splash.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "17a0a63a-f1f9-458d-a5cd-cba72b924e4f"
+      }
+    },
+    "owner": "lalomora06"
   }
 }

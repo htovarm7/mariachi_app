@@ -6,6 +6,8 @@ module.exports = {
       fontFamily: {
         FunnelSans: ["FunnelSans", "sans-serif"],
         FunnelSansBold: ["FunnelSans-Bold", "sans-serif"],
+        FunnelSansExtraBold: ["FunnelSans-ExtraBold", "sans-serif"],
+        FunnelSansExtraLight: ["FunnelSans-ExtraLight", "sans-serif"],
         FunnelSansLight: ["FunnelSans-Light", "sans-serif"],
         FunnelSansMedium: ["FunnelSans-Medium", "sans-serif"],
         FunnelSansSemiBold: ["FunnelSans-SemiBold", "sans-serif"],
