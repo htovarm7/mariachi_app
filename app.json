@@ -1,10 +1,10 @@
 {
   "expo": {
     "name": "mariachi_app",
-    "slug": "mariachi_app",
+    "slug": "mariachi-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/Icon.png",
+    "icon": "./assets/icons/icon.png",
     "scheme": "mariachiapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -43,6 +43,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "17a0a63a-f1f9-458d-a5cd-cba72b924e4f"
+      }
+    },
+    "owner": "lalomora06"
   }
 }
