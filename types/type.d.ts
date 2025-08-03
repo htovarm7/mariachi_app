@@ -28,7 +28,7 @@ declare interface MapProps {
   onMapReady?: () => void;
 }
 
-declare interface Ride {
+declare interface Booking {
   address: string;
   latitude: number;
   longitude: number;
