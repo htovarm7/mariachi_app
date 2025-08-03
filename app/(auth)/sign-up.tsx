@@ -57,7 +57,6 @@ const SignUp = () => {
         // TODO: Create a db user
         await setActive({ session: signUpAttempt.createdSessionId });
         setVerification({ ...verification, state: "success" });
-        // router.replace("/");
       } else {
         setVerification({
           ...verification,
@@ -80,31 +79,34 @@ const SignUp = () => {
     <ScrollView className="flex-1 bg-white">
       <View className="flex-1 bg-white">
         <View className="relative w-full h-[250px]">
-          <Image source={null} className="z-0 w-full h-[250px]" />
-          <Text className="text-2xl text-black font-FunnelSansSemiBold absolute bottom-5 left-5">
+          <Image
+            source={require("../../assets/images/bg-serenata.jpeg")}
+            className="z-0 w-full h-[250px]"
+          />
+          <Text className="text-2xl text-white font-FunnelSansSemiBold absolute bottom-5 left-5">
             {" "}
-            Create Your Account
+            Create Your Account 👤
           </Text>
         </View>
         <View className="p-5">
           <InputField
             label="Name"
             placeholder="Enter your name"
-            icon={null}
+            icon={require("../../assets/images/person.png")}
             value={form.name}
             onChangeText={(value) => setForm({ ...form, name: value })}
           />
           <InputField
             label="Email"
             placeholder="Enter your email"
-            icon={null}
+            icon={require("../../assets/images/email.png")}
             value={form.email}
             onChangeText={(value) => setForm({ ...form, email: value })}
           />
           <InputField
             label="Password"
             placeholder="Enter your password"
-            icon={null}
+            icon={require("../../assets/images/password.png")}
             secureTextEntry={true}
             value={form.password}
             onChangeText={(value) => setForm({ ...form, password: value })}
@@ -123,7 +125,7 @@ const SignUp = () => {
             className="text-lg text-center text-general-200 mt-10"
           >
             <Text> Already have an account?</Text>
-            <Text className="text-primary-500">Log In</Text>
+            <Text className="text-primary-500"> Log In</Text>
           </Link>
         </View>
 
@@ -167,7 +169,10 @@ const SignUp = () => {
 
         <ReactNativeModal isVisible={showSuccessModal}>
           <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
-            <Image source={null} className="w-[110px] h-[110px] mx-auto my-5" />
+            <Image
+              source={require("../../assets/images/check.png")}
+              className="w-[110px] h-[110px] mx-auto my-5"
+            />
             <Text className="text-3xl font-FunnelSansBold text-center">
               Verified
             </Text>
