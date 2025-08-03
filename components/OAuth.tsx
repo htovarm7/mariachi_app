@@ -15,14 +15,11 @@ const OAuth = () => {
       <CustomButton
         title="Log In with Google"
         className="mt-5 w-full shadow-none"
+        onPress={handleGoogleSignIn}
         IconLeft={() => (
           <Image
-            source={null}
-            contentFit="contain"
-            className="w-5 h-5 mx-2"
-            bgVariant="outline"
-            textVariant="primary"
-            onPress={handleGoogleSignIn}
+            source={require("../assets/icons/google.png")}
+            style={{ width: 20, height: 20, marginHorizontal: 8 }}
           />
         )}
       />
