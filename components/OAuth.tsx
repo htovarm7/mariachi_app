@@ -1,5 +1,6 @@
 import { Image, Text, View } from "react-native";
 import CustomButton from "./customButton";
+import { icons } from "../constants/index";
 
 const OAuth = () => {
   const handleGoogleSignIn = async () => {};
@@ -18,7 +19,7 @@ const OAuth = () => {
         onPress={handleGoogleSignIn}
         IconLeft={() => (
           <Image
-            source={require("../assets/icons/google.png")}
+            source={icons.googleIcon}
             style={{ width: 20, height: 20, marginHorizontal: 8 }}
           />
         )}

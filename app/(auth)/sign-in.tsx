@@ -5,6 +5,7 @@ import { Link, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { Text, ScrollView, View, Image } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
+import { icons } from "../../constants/index";
 
 const SignIn = () => {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -38,10 +39,7 @@ const SignIn = () => {
     <ScrollView className="flex-1 bg-white">
       <View className="flex-1 bg-white">
         <View className="relative w-full h-[250px]">
-          <Image
-            source={require("../../assets/images/bg-guitar.jpeg")}
-            className="z-0 w-full h-[250px]"
-          />
+          <Image source={icons.bg_guitar} className="z-0 w-full h-[250px]" />
           <Text className="text-2xl text-white font-FunnelSansSemiBold absolute bottom-5 left-5">
             {" "}
             Welcome 👋
@@ -51,14 +49,14 @@ const SignIn = () => {
           <InputField
             label="Email"
             placeholder="Enter your email"
-            icon={require("../../assets/images/email.png")}
+            icon={icons.email}
             value={form.email}
             onChangeText={(value) => setForm({ ...form, email: value })}
           />
           <InputField
             label="Password"
             placeholder="Enter your password"
-            icon={require("../../assets/images/password.png")}
+            icon={icons.password}
             secureTextEntry={true}
             value={form.password}
             onChangeText={(value) => setForm({ ...form, password: value })}

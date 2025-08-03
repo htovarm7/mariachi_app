@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Text, ScrollView, View, Image, Alert } from "react-native";
 import ReactNativeModal from "react-native-modal";
 import { useSignUp } from "@clerk/clerk-expo";
+import { icons } from "../../constants/index";
 
 const SignUp = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -79,10 +80,7 @@ const SignUp = () => {
     <ScrollView className="flex-1 bg-white">
       <View className="flex-1 bg-white">
         <View className="relative w-full h-[250px]">
-          <Image
-            source={require("../../assets/images/bg-serenata.jpeg")}
-            className="z-0 w-full h-[250px]"
-          />
+          <Image source={icons.bg_serenata} className="z-0 w-full h-[250px]" />
           <Text className="text-2xl text-white font-FunnelSansSemiBold absolute bottom-5 left-5">
             {" "}
             Create Your Account 👤
@@ -92,21 +90,21 @@ const SignUp = () => {
           <InputField
             label="Name"
             placeholder="Enter your name"
-            icon={require("../../assets/images/person.png")}
+            icon={icons.profile}
             value={form.name}
             onChangeText={(value) => setForm({ ...form, name: value })}
           />
           <InputField
             label="Email"
             placeholder="Enter your email"
-            icon={require("../../assets/images/email.png")}
+            icon={icons.email}
             value={form.email}
             onChangeText={(value) => setForm({ ...form, email: value })}
           />
           <InputField
             label="Password"
             placeholder="Enter your password"
-            icon={require("../../assets/images/password.png")}
+            icon={icons.password}
             secureTextEntry={true}
             value={form.password}
             onChangeText={(value) => setForm({ ...form, password: value })}
@@ -170,7 +168,7 @@ const SignUp = () => {
         <ReactNativeModal isVisible={showSuccessModal}>
           <View className="bg-white px-7 py-9 rounded-2xl min-h-[300px]">
             <Image
-              source={require("../../assets/images/check.png")}
+              source={icons.check}
               className="w-[110px] h-[110px] mx-auto my-5"
             />
             <Text className="text-3xl font-FunnelSansBold text-center">

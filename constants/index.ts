@@ -1,6 +1,13 @@
 const onboarding1 = require("../assets/images/onboarding1.jpeg");
 const onboarding2 = require("../assets/images/onboarding2.jpeg");
 const onboarding3 = require("../assets/images/onboarding3.jpeg");
+const password = require("../assets/images/password.png");
+const email = require("../assets/images/email.png");
+const profile = require("../assets/images/profile.png");
+const check = require("../assets/images/check.png");
+const bg_guitar = require("../assets/images/bg-guitar.png");
+const bg_serenata = require("../assets/images/bg-serenata.png");
+const googleIcon = require("../assets/images/google.png");
 
 export const onboarding = [
   {
@@ -31,4 +38,12 @@ export const images = {
   onboarding3,
 };
 
-export const icons = {};
+export const icons = {
+  password,
+  email,
+  profile,
+  check,
+  bg_guitar,
+  bg_serenata,
+  googleIcon,
+};
