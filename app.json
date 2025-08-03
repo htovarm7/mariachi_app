@@ -4,7 +4,7 @@
     "slug": "mariachi-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/icon.png",
+    "icon": "./assets/icons/Icon.png",
     "scheme": "mariachiapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -14,19 +14,22 @@
       "backgroundColor": "#2f80ed"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lalomora06.mariachiapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.lalomora06.mariachiapp"
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
-      "favicon": ""
+      "output": "static"
     },
     "plugins": [
       "expo-router",

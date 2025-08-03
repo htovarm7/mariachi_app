@@ -4,7 +4,6 @@ import "react-native-reanimated";
 import "../global.css";
 import { useEffect } from "react";
 import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
-import { Slot } from "expo-router";
 import { tokenCache } from "@clerk/clerk-expo/token-cache";
 
 SplashScreen.preventAutoHideAsync();

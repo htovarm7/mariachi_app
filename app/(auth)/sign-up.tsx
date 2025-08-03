@@ -140,7 +140,7 @@ const SignUp = () => {
               Verification
             </Text>
             <Text className="font-FunnelSans mb-5">
-              We've sent a verification code to {form.email}
+              We&aposve sent a verification code to {form.email}
             </Text>
             <InputField
               label="Code"
