@@ -29,10 +29,10 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static"
+      "output": "server"
     },
     "plugins": [
-      "expo-router",
+      ["expo-router", { "origin": "https://mariachiapp.com/" }],
       [
         "expo-splash-screen",
         {
