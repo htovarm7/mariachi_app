@@ -1,50 +1,46 @@
-# Welcome to your Expo app 👋
+# Mariachi App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Mariachi App is a web application designed to help users manage mariachi events, bookings, and musicians. It leverages modern frontend and backend technologies, supports user authentication, and stores data securely in a relational database.
 
-## Get started
+## ⚙️ Features
 
-1. Install dependencies
+- Event and booking management
+- Musician profiles
+- User authentication
+- Calendar integration
+- Notifications
 
-   ```bash
-   npm install
-   ```
+## 📸 Screenshots
 
-2. Start the app
+- TODO
 
-   ```bash
-   npx expo start
-   ```
+## Built With 🛠
 
-In the output, you'll find options to open the app in a
+- [Next.js](https://nextjs.org) - React-based frontend and backend framework
+- [React Native](https://reactnative.dev) - Mobile app development framework
+- [Clerk](https://clerk.com) - User authentication and management
+- [Neon Database](https://neon.tech) - Serverless PostgreSQL database
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Prerequisites
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- [NodeJS](https://nodejs.org/en/) version 22+
+- [React Native](https://reactnative.dev)
+- To test the mobile app, you can use [Android Studio](https://developer.android.com/studio?hl=en-419) to emulate Android devices, or use Expo Go app to use it on your own phone.
 
-## Get a fresh project
+## 🚀 Getting Started
 
-When you're ready, run:
+### 1. Install dependencies
 
 ```bash
-npm run reset-project
+npx expo install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Mobile App
 
-## Learn more
+To run the mobile app, use:
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npx expo start
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Follow the instructions in the terminal to open the app on an emulator or your device.
