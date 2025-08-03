@@ -1,17 +1,26 @@
-import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { useFonts } from "expo-font";
+import { SplashScreen, Stack } from "expo-router";
+import "react-native-reanimated";
+import "../global.css";
+import { useEffect } from "react";
+import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
+import { Slot } from "expo-router";
+import { tokenCache } from "@clerk/clerk-expo/token-cache";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded] = useFonts({
-    FunnelSans: require('../assets/fonts/FunnelSans-Regular.ttf'),
+    "FunnelSans-Regular": require("../assets/fonts/FunnelSans-Regular.ttf"),
+    "FunnelSans-Bold": require("../assets/fonts/FunnelSans-Bold.ttf"),
+    "FunnelSans-Light": require("../assets/fonts/FunnelSans-Light.ttf"),
+    "FunnelSans-Medium": require("../assets/fonts/FunnelSans-Medium.ttf"),
+    "FunnelSans-SemiBold": require("../assets/fonts/FunnelSans-SemiBold.ttf"),
+    "FunnelSans-ExtraBold": require("../assets/fonts/FunnelSans-ExtraBold.ttf"),
   });
 
   useEffect(() => {
-    if (!loaded) {
+    if (loaded) {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
@@ -21,9 +30,14 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" />
-    </Stack>
+    <ClerkProvider tokenCache={tokenCache}>
+      <ClerkLoaded>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(root)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        </Stack>
+      </ClerkLoaded>
+    </ClerkProvider>
   );
 }
