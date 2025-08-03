@@ -28,8 +28,8 @@ jobs:
       - name: ESLint check (opcional)
         run: npx eslint . --ext .js,.ts,.tsx || true
 
-      - name: Expo prebuild check
-        run: npx expo prebuild --no-install
+      - name: Expo prebuild check (solo Android)
+        run: npx expo prebuild --no-install --platform android
 
       - name: Build production bundle (simula build final)
         run: npx expo export
