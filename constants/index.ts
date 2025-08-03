@@ -24,3 +24,11 @@ export const onboarding = [
     image: onboarding3,
   },
 ];
+
+export const images = {
+  onboarding1,
+  onboarding2,
+  onboarding3,
+};
+
+export const icons = {};
