@@ -29,10 +29,14 @@ declare interface MapProps {
 }
 
 declare interface Booking {
-  address: string;
-  latitude: number;
-  longitude: number;
-  ETA_time: number;
+  origin_address: string;
+  origin_latitude: number;
+  origin_longitude: number;
+  destination_address: string;
+  destination_latitude: number;
+  destination_longitude: number;
+  serenata_time: number;
+  price: number;
   payment_status: string;
   driver_id: number;
   user_email: string;
