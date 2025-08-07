@@ -5,7 +5,7 @@ import { Link, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import { Text, ScrollView, View, Image } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
-import { icons } from "../../constants/index";
+import { icons } from "@/constants/index";
 
 const SignIn = () => {
   const { signIn, setActive, isLoaded } = useSignIn();

@@ -19,7 +19,7 @@ const OAuth = () => {
         onPress={handleGoogleSignIn}
         IconLeft={() => (
           <Image
-            source={icons.googleIcon}
+            source={icons.google}
             style={{ width: 20, height: 20, marginHorizontal: 8 }}
           />
         )}

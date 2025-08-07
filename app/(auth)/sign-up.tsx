@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Text, ScrollView, View, Image, Alert } from "react-native";
 import ReactNativeModal from "react-native-modal";
 import { useSignUp } from "@clerk/clerk-expo";
-import { icons } from "../../constants/index";
+import { icons } from "@/constants/index";
 import { fetchAPI } from "@/lib/fetch";
 
 const SignUp = () => {

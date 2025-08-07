@@ -22,14 +22,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Type check (si usas TypeScript)
+      - name: Type check
         run: npx tsc --noEmit
 
-      - name: ESLint check (opcional)
+      - name: ESLint check
         run: npx eslint . --ext .js,.ts,.tsx || true
 
       - name: Expo prebuild check
-        run: npx expo prebuild --no-install
+        run: npx expo prebuild --platform android --no-install
 
-      - name: Build production bundle (simula build final)
-        run: npx expo export
+      - name: Build Android bundle
+        run: npx expo export --platform android
+
+      - name: Build iOS bundle
+        run: npx expo export --platform ios

@@ -3,8 +3,6 @@ import { TextInputProps, TouchableOpacityProps } from "react-native";
 declare interface Mariachi {
   mariachi_id: number;
   name: string;
-  profile_image_url: string;
-  images: string[];
   members: number;
   rating: number;
 }
@@ -13,7 +11,6 @@ declare interface MarkerData {
   latitude: number;
   longitude: number;
   id: number;
-  mariachi_image_url: string;
   members: number;
   rating: number;
   name: string;
@@ -29,12 +26,16 @@ declare interface MapProps {
 }
 
 declare interface Booking {
-  address: string;
-  latitude: number;
-  longitude: number;
-  ETA_time: number;
+  origin_address: string;
+  origin_latitude: number;
+  origin_longitude: number;
+  destination_address: string;
+  destination_latitude: number;
+  destination_longitude: number;
+  serenata_time: number;
+  price: number;
   payment_status: string;
-  driver_id: number;
+  mariachi_id: number;
   user_email: string;
   created_at: string;
   mariachi: {
@@ -54,7 +55,7 @@ declare interface ButtonProps extends TouchableOpacityProps {
 
 declare interface GoogleInputProps {
   icon?: string;
-  Location?: string;
+  initialLocation?: string;
   containerStyle?: string;
   textInputBackgroundColor?: string;
   handlePress: ({
@@ -88,10 +89,22 @@ declare interface PaymentProps {
 }
 
 declare interface LocationStore {
-  Latitude: number | null;
-  Longitude: number | null;
-  Address: string | null;
-  setLocation: ({
+  userLatitude: number | null;
+  userLongitude: number | null;
+  userAddress: string | null;
+  destinationLatitude: number | null;
+  destinationLongitude: number | null;
+  destinationAddress: string | null;
+  setUserLocation: ({
+    latitude,
+    longitude,
+    address,
+  }: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  }) => void;
+  setDestinationLocation: ({
     latitude,
     longitude,
     address,
