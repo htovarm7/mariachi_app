@@ -31,6 +31,15 @@ const MariachiCard = ({
           <View className="flex flex-col mx-5 gap-y-5 flex-1">
             <View className="flex flex-row items-center gap-x-2">
               <Image source={icons} className="w-5 h-5" />
+              <Text className="text-md font-FunnelSansMedium">
+                {origin_address}
+              </Text>
+            </View>
+            <View className="flex flex-row items-center gap-x-2">
+              <Image source={icons} className="w-5 h-5" />
+              <Text className="text-md font-FunnelSansMedium">
+                {destination_address}
+              </Text>
             </View>
           </View>
         </View>
