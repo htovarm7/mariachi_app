@@ -31,5 +31,8 @@ jobs:
       - name: Expo prebuild check
         run: npx expo prebuild --platform android --no-install
 
-      - name: Build production bundle (only mobile)
-        run: npx expo export --platform android,ios
+      - name: Build Android bundle
+        run: npx expo export --platform android
+
+      - name: Build iOS bundle
+        run: npx expo export --platform ios
