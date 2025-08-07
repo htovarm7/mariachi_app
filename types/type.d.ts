@@ -35,7 +35,7 @@ declare interface Booking {
   serenata_time: number;
   price: number;
   payment_status: string;
-  driver_id: number;
+  mariachi_id: number;
   user_email: string;
   created_at: string;
   mariachi: {

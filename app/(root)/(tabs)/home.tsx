@@ -21,16 +21,17 @@ const recent_books = [
   {
     serenade_id: "1",
     origin_address: "Coyoacán, Ciudad de México",
-    origin_latitude: "19.35529",
-    origin_longitude: "-99.16207",
+    origin_latitude: 19.35529,
+    origin_longitude: -99.16207,
     destination_address: "Santa Fe, Ciudad de México",
-    destination_latitude: "19.3032",
-    destination_longitude: "-99.2106",
+    destination_latitude: 19.3032,
+    destination_longitude: -99.2106,
     serenata_time: 45,
-    serenade_price: "3500.00",
+    price: 3500.0,
     payment_status: "paid",
     mariachi_id: 2,
     user_id: "1",
+    user_email: "user@example.com",
     created_at: "2025-08-02 20:35:12",
     mariachi: {
       mariachi_id: "2",
@@ -45,16 +46,17 @@ const recent_books = [
   {
     serenade_id: "2",
     origin_address: "Centro Histórico, Guadalajara",
-    origin_latitude: "20.6736",
-    origin_longitude: "-103.344",
+    origin_latitude: 20.6736,
+    origin_longitude: -103.344,
     destination_address: "Zapopan, Jalisco",
-    destination_latitude: "20.7236",
-    destination_longitude: "-103.3848",
+    destination_latitude: 20.7236,
+    destination_longitude: -103.3848,
     serenata_time: 60,
-    serenade_price: "4200.00",
+    price: 4200.0,
     payment_status: "paid",
     mariachi_id: 1,
     user_id: "1",
+    user_email: "user@example.com",
     created_at: "2025-08-02 21:15:47",
     mariachi: {
       mariachi_id: "1",
@@ -69,16 +71,17 @@ const recent_books = [
   {
     serenade_id: "3",
     origin_address: "Colonia Roma, CDMX",
-    origin_latitude: "19.4164",
-    origin_longitude: "-99.1622",
+    origin_latitude: 19.4164,
+    origin_longitude: -99.1622,
     destination_address: "Polanco, CDMX",
-    destination_latitude: "19.4326",
-    destination_longitude: "-99.1970",
+    destination_latitude: 19.4326,
+    destination_longitude: -99.197,
     serenata_time: 30,
-    serenade_price: "2800.00",
+    price: 2800.0,
     payment_status: "paid",
     mariachi_id: 1,
     user_id: "1",
+    user_email: "user@example.com",
     created_at: "2025-08-03 09:02:11",
     mariachi: {
       mariachi_id: "1",
@@ -93,16 +96,17 @@ const recent_books = [
   {
     serenade_id: "4",
     origin_address: "San Pedro Garza García, NL",
-    origin_latitude: "25.6508",
-    origin_longitude: "-100.4044",
+    origin_latitude: 25.6508,
+    origin_longitude: -100.4044,
     destination_address: "Monterrey Centro, NL",
-    destination_latitude: "25.6866",
-    destination_longitude: "-100.3161",
+    destination_latitude: 25.6866,
+    destination_longitude: -100.3161,
     serenata_time: 40,
-    serenade_price: "3100.00",
+    price: 3100.0,
     payment_status: "paid",
     mariachi_id: 3,
     user_id: "1",
+    user_email: "user@example.com",
     created_at: "2025-08-03 11:20:34",
     mariachi: {
       mariachi_id: "3",
@@ -130,7 +134,6 @@ const Home = () => {
     address: string;
   }) => {
     setDestinationLocation(location);
-    router.push("/(root)/(tabs)/find-mariachi");
   };
 
   useEffect(() => {
