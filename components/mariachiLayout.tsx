@@ -3,15 +3,17 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { router } from "expo-router";
 import { icons } from "@/constants";
 import Map from "./map";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { useRef } from "react";
 
 const MariachiLayout = ({
   children,
   title,
+  snapPoints,
 }: {
   children: React.ReactNode;
   title: string;
+  snapPoints?: string[];
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -38,12 +40,13 @@ const MariachiLayout = ({
         </View>
         <BottomSheet
           ref={bottomSheetRef}
-          snapPoints={["40%", "85%"]}
+          snapPoints={snapPoints || ["40%", "85%"]}
           index={0}
+          children={undefined}
         />
-        <BottomSheetScrollView style={{ flex: 1, padding: 20 }}>
+        <BottomSheetView style={{ flex: 1, padding: 20 }}>
           {children}
-        </BottomSheetScrollView>
+        </BottomSheetView>
       </View>
     </GestureHandlerRootView>
   );

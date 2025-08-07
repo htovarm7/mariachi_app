@@ -7,8 +7,8 @@ export default function Layout() {
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="select-mariachi" options={{ headerShown: false }} />
-      {/* <Stack.Screen name="confirm-mariachi" options={{ headerShown: false }} />
-      <Stack.Screen name="book-mariachi" options={{ headerShown: false }} /> */}
+      <Stack.Screen name="confirm-mariachi" options={{ headerShown: false }} />
+      {/* <Stack.Screen name="book-mariachi" options={{ headerShown: false }} /> */}
     </Stack>
   );
 }
