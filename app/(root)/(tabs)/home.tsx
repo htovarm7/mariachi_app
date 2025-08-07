@@ -201,13 +201,13 @@ const Home = () => {
                 <Image source={icons.out} className="w-4 h-4" />
               </TouchableOpacity>
             </View>
-
-            {/* API PROBLEM 
             <GoogleTextInput
               icon={icons.search}
               containerStyle="bg-white shadow-md shadow-neutral-300"
               handlePress={handleDestinationPress}
-            /> */}
+              initialLocation=""
+              textInputBackgroundColor="transparent"
+            />
 
             {hasPermissions && userLocation && (
               <>
@@ -219,7 +219,6 @@ const Home = () => {
                 </View>
               </>
             )}
-
             <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Recent Bookings
             </Text>

@@ -1,7 +1,8 @@
+import { View, Image } from "react-native";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import "react-native-get-random-values";
 import { icons } from "@/constants";
 import { GoogleInputProps } from "@/types/type";
-import { Text, View, Image } from "react-native";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 const googlePlacesApiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
@@ -14,11 +15,11 @@ const GoogleTextInput = ({
 }: GoogleInputProps) => {
   return (
     <View
-      className={`flex flex-row items-center justify-center relative z-50 rounded-xl ${containerStyle} mb-5`}
+      className={`flex flex-row items-center justify-center relative z-50 rounded-xl ${containerStyle}`}
     >
       <GooglePlacesAutocomplete
         fetchDetails={true}
-        placeholder="Location of Serenata"
+        placeholder="Search"
         debounce={200}
         styles={{
           textInputContainer: {
@@ -30,7 +31,9 @@ const GoogleTextInput = ({
             shadowColor: "#d4d4d4",
           },
           textInput: {
-            backgroundColor: textInputBackgroundColor || "white",
+            backgroundColor: textInputBackgroundColor
+              ? textInputBackgroundColor
+              : "white",
             fontSize: 16,
             fontWeight: "600",
             marginTop: 5,
@@ -38,7 +41,9 @@ const GoogleTextInput = ({
             borderRadius: 200,
           },
           listView: {
-            backgroundColor: textInputBackgroundColor || "white",
+            backgroundColor: textInputBackgroundColor
+              ? textInputBackgroundColor
+              : "white",
             position: "relative",
             top: 0,
             width: "100%",
@@ -69,7 +74,7 @@ const GoogleTextInput = ({
         )}
         textInputProps={{
           placeholderTextColor: "gray",
-          placeholder: initialLocation ?? "Where the serenata?",
+          placeholder: initialLocation ?? "Where the serenade?",
         }}
       />
     </View>
