@@ -2,6 +2,7 @@ import Bookings from "@/app/(root)/(tabs)/bookings";
 import { icons } from "@/constants";
 import { Booking } from "@/types/type";
 import { Text, View, Image } from "react-native";
+import { formatDate, formatTime } from "@/lib/utils";
 
 const MariachiCard = ({
   Booking: {
@@ -21,7 +22,7 @@ const MariachiCard = ({
 
   return (
     <View className="flex flex-row items-center justify-center bg-white rounded-lg shadow-sm shadow-neutral-300 mb-3">
-      <View className="flex flex-row items-center justify-between p-3">
+      <View className="flex flex-col items-center justify-center p-3">
         <View className="flex flex-row items-center justify-between">
           <Image
             source={{
@@ -51,7 +52,35 @@ const MariachiCard = ({
               Date & Time
             </Text>
             <Text className="text-md font-FunnelSansMedium text-gray-500">
-              {formatDate(created_at)}, {formatDate(serenata_time)}
+              {formatDate(created_at)}, {formatTime(serenata_time)}
+            </Text>
+          </View>
+
+          <View className="flex flex-row items-center w-full justify-between mb-5">
+            <Text className="text-md font-FunnelSansMedium text-gray-500">
+              Mariachi
+            </Text>
+            <Text className="text-md font-FunnelSansMedium text-gray-500">
+              {mariachi.name}
+            </Text>
+          </View>
+
+          <View className="flex flex-row items-center w-full justify-between mb-5">
+            <Text className="text-md font-FunnelSansMedium text-gray-500">
+              Members
+            </Text>
+            <Text className="text-md font-FunnelSansMedium text-gray-500">
+              {mariachi.members}
+            </Text>
+          </View>
+          <View className="flex flex-row items-center w-full justify-between mb-5">
+            <Text className="text-md font-FunnelSansMedium text-gray-500">
+              Payment Status
+            </Text>
+            <Text
+              className={`text-md mr-2 capitalize font-FunnelSansMedium text-gray-500 ${payment_status === "paid" ? "text-green-500" : "text-red-500"}`}
+            >
+              {payment_status}
             </Text>
           </View>
         </View>

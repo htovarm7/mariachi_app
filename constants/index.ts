@@ -6,6 +6,7 @@ import password from "@/assets/images/password.png";
 import check from "@/assets/images/check.png";
 import bg_guitar from "@/assets/images/bg-guitar.jpeg";
 import bg_serenata from "@/assets/images/bg-serenata.jpeg";
+import noResult from "@/assets/images/no-result.png";
 
 // Icons
 import arrowDown from "@/assets/icons/arrow-down.png";
@@ -61,6 +62,7 @@ export const images = {
   onboarding1,
   onboarding2,
   onboarding3,
+  noResult,
 };
 
 export const icons = {

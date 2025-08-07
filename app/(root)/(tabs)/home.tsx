@@ -1,6 +1,17 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FlatList, Text } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import MariachiCard from "@/components/mariachiCard";
+import { useUser } from "@clerk/clerk-expo";
+import { icons, images } from "@/constants";
+import GoogleTextInput from "@/components/googleTextInput";
+import Map from "@/components/map";
 
 const recent_books = [
   {
@@ -8,10 +19,10 @@ const recent_books = [
     origin_address: "Coyoacán, Ciudad de México",
     origin_latitude: "19.35529",
     origin_longitude: "-99.16207",
-    destination_address: "Centro Histórico, Ciudad de México",
-    destination_latitude: "19.432608",
-    destination_longitude: "-99.133209",
-    serenade_duration: 45,
+    destination_address: "Santa Fe, Ciudad de México",
+    destination_latitude: "19.3032",
+    destination_longitude: "-99.2106",
+    serenata_time: 45,
     serenade_price: "3500.00",
     payment_status: "paid",
     mariachi_id: 2,
@@ -34,8 +45,8 @@ const recent_books = [
     origin_longitude: "-103.344",
     destination_address: "Zapopan, Jalisco",
     destination_latitude: "20.7236",
-    destination_longitude: "-103.384",
-    serenade_duration: 60,
+    destination_longitude: "-103.3848",
+    serenata_time: 60,
     serenade_price: "4200.00",
     payment_status: "paid",
     mariachi_id: 1,
@@ -59,7 +70,7 @@ const recent_books = [
     destination_address: "Polanco, CDMX",
     destination_latitude: "19.4326",
     destination_longitude: "-99.1970",
-    serenade_duration: 30,
+    serenata_time: 30,
     serenade_price: "2800.00",
     payment_status: "paid",
     mariachi_id: 1,
@@ -80,10 +91,10 @@ const recent_books = [
     origin_address: "San Pedro Garza García, NL",
     origin_latitude: "25.6508",
     origin_longitude: "-100.4044",
-    destination_address: "Monterrey, NL",
+    destination_address: "Monterrey Centro, NL",
     destination_latitude: "25.6866",
     destination_longitude: "-100.3161",
-    serenade_duration: 40,
+    serenata_time: 40,
     serenade_price: "3100.00",
     payment_status: "paid",
     mariachi_id: 3,
@@ -102,11 +113,73 @@ const recent_books = [
 ];
 
 const Home = () => {
+  const { user } = useUser();
+  const loading = false;
+
+  const handleSignOut = () => {};
+  const handleDestinationPress = () => {};
+
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
         data={recent_books?.slice(0, 5)}
         renderItem={({ item }) => <MariachiCard Booking={item} />}
+        className="px-5"
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: 100 }}
+        ListEmptyComponent={() => (
+          <View className="flex flex-col items-center justify-center">
+            {!loading ? (
+              <>
+                <Image
+                  source={images.noResult}
+                  className="w-40 h-40"
+                  alt="No recent bookings"
+                  resizeMode="contain"
+                />
+                <Text className="text-sm">No recent bookings found</Text>
+              </>
+            ) : (
+              <ActivityIndicator size="small" color="#000" />
+            )}
+          </View>
+        )}
+        ListHeaderComponent={() => (
+          <>
+            <View className="flex flex-row items-center justify-between my-5">
+              <Text className="text-2xl capitalize font-FunnelSansExtraBold">
+                Welcome,{" "}
+                {user?.firstName ||
+                  user?.emailAddresses[0].emailAddress.split("@")[0]}
+                👋
+              </Text>
+              <TouchableOpacity
+                onPress={handleSignOut}
+                className="justify-center items-center w-10 h-10 rounded-full bg-white"
+              >
+                <Image source={icons.out} className="w-4 h-4" />
+              </TouchableOpacity>
+            </View>
+
+            <GoogleTextInput
+              icon={icons.search}
+              containerStyle="bg-white shadow-md shadow-neutral-300"
+              handlePress={handleDestinationPress}
+            />
+            <>
+              <Text className="text-xl font-FunnelSansBold mt-5 mb-3">
+                Your Current Location
+              </Text>
+              <View className="flex flex-row items-center bg-transparent h-[300px]">
+                <Map />
+              </View>
+            </>
+
+            <Text className="text-xl font-FunnelSansBold mt-5 mb-3">
+              Recent Bookings
+            </Text>
+          </>
+        )}
       />
     </SafeAreaView>
   );
