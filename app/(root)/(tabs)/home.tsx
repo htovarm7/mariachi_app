@@ -12,6 +12,9 @@ import { useUser } from "@clerk/clerk-expo";
 import { icons, images } from "@/constants";
 import GoogleTextInput from "@/components/googleTextInput";
 import Map from "@/components/map";
+import { useLocationStore } from "@/store";
+import { useEffect, useState } from "react";
+import * as Location from "expo-location";
 
 const recent_books = [
   {
@@ -113,11 +116,34 @@ const recent_books = [
 ];
 
 const Home = () => {
+  const { setUserLocation, setDestinationLocation } = useLocationStore();
   const { user } = useUser();
   const loading = false;
 
+  const [hasPermissions, setHasPermission] = useState();
+
   const handleSignOut = () => {};
   const handleDestinationPress = () => {};
+
+  (useEffect(() => {
+    const requestLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        setHasPermission(false);
+        return;
+      }
+    };
+    let location = await Location.getCurrentPositionAsync();
+
+    const address = await Location.reverseGeocodeAsync({
+      latitude: location.coords?.latitude!,
+      longitude: location.coords?.longitude!,
+    });
+
+    setUserLocation;
+    requestLocation();
+  }),
+    []);
 
   return (
     <SafeAreaView className="bg-general-500">
