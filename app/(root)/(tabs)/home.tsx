@@ -121,7 +121,8 @@ const recent_books = [
 ];
 
 const Home = () => {
-  const { setUserLocation, setDestinationLocation } = useLocationStore();
+  const { setUserLocation, setDestinationLocation, userLocation } =
+    useLocationStore();
   const { user } = useUser();
   const loading = false;
 
@@ -140,10 +141,12 @@ const Home = () => {
   useEffect(() => {
     const requestLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
+      if (status !== "granted") {
         setHasPermission(false);
         return;
       }
+
+      setHasPermission(true);
       let location = await Location.getCurrentPositionAsync();
 
       const address = await Location.reverseGeocodeAsync({
@@ -163,7 +166,7 @@ const Home = () => {
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
-        data={recent_books?.slice(0, 5)}
+        data={recent_books || []}
         renderItem={({ item }) => <MariachiCard Booking={item} />}
         className="px-5"
         keyboardShouldPersistTaps="handled"
@@ -188,11 +191,8 @@ const Home = () => {
         ListHeaderComponent={() => (
           <>
             <View className="flex flex-row items-center justify-between my-5">
-              <Text className="text-2xl capitalize font-FunnelSansExtraBold">
-                Welcome,{" "}
-                {user?.firstName ||
-                  user?.emailAddresses[0].emailAddress.split("@")[0]}
-                👋
+              <Text className="text-2xl font-JakartaExtraBold">
+                Welcome {user?.firstName || "User"}👋
               </Text>
               <TouchableOpacity
                 onPress={handleSignOut}
@@ -202,21 +202,25 @@ const Home = () => {
               </TouchableOpacity>
             </View>
 
+            {/* API PROBLEM 
             <GoogleTextInput
               icon={icons.search}
               containerStyle="bg-white shadow-md shadow-neutral-300"
               handlePress={handleDestinationPress}
-            />
-            <>
-              <Text className="text-xl font-FunnelSansBold mt-5 mb-3">
-                Your Current Location
-              </Text>
-              <View className="flex flex-row items-center bg-transparent h-[300px]">
-                <Map />
-              </View>
-            </>
+            /> */}
 
-            <Text className="text-xl font-FunnelSansBold mt-5 mb-3">
+            {hasPermissions && userLocation && (
+              <>
+                <Text className="text-xl font-JakartaBold mt-5 mb-3">
+                  Your current location
+                </Text>
+                <View className="flex flex-row items-center bg-transparent h-[300px]">
+                  <Map />
+                </View>
+              </>
+            )}
+
+            <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Recent Bookings
             </Text>
           </>

@@ -12,7 +12,7 @@ const SelectMariachi = () => {
     destinationAddress,
     setDestinationLocation,
     setUserLocation,
-  } = useLocationStore;
+  } = useLocationStore();
 
   return (
     <MariachiLayout title="Mariachi" snapPoints={["85%"]}>
@@ -20,7 +20,7 @@ const SelectMariachi = () => {
         <Text className="text-xl font-FunnelSansSemiBold mb-3">To</Text>
         <GoogleTextInput
           icon={icons.target}
-          initialLocation={userAddress}
+          initialLocation={userAddress ?? undefined}
           containerStyle="bg-neutral-100"
           textInputBackgroundColor="#f5f5f5"
           handlePress={(location) => setUserLocation(location)}
