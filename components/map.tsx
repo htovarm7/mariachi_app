@@ -28,9 +28,7 @@ const Map = () => {
       initialRegion={region}
       showsUserLocation={true}
       userInterfaceStyle="light"
-    >
-      <Text>Map</Text>
-    </MapView>
+    />
   );
 };
 
