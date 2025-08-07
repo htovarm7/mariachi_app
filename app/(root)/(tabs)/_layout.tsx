@@ -53,7 +53,7 @@ const Layout = () => {
           title: "Home",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} source={icons.homeIcon} />
+            <TabIcon focused={focused} source={icons.home} />
           ),
         }}
       />
@@ -63,7 +63,7 @@ const Layout = () => {
           title: "Bookings",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} source={icons.listIcon} />
+            <TabIcon focused={focused} source={icons.list} />
           ),
         }}
       />
@@ -73,7 +73,7 @@ const Layout = () => {
           title: "Chat",
           headerShown: false,
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} source={icons.chatIcon} />
+            <TabIcon focused={focused} source={icons.chat} />
           ),
         }}
       />
