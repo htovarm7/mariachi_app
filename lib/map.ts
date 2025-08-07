@@ -17,11 +17,11 @@ export const generateMarkersFromData = ({
 
     return {
       id: mariachi.mariachi_id,
-      mariachi_image_url: mariachi.profile_image_url,
       latitude: userLatitude + latOffset,
       longitude: userLongitude + lngOffset,
-      title: `${mariachi.name} `,
-      ...mariachi,
+      members: mariachi.members,
+      rating: mariachi.rating,
+      name: mariachi.name,
     };
   });
 };

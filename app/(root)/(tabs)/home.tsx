@@ -15,6 +15,7 @@ import Map from "@/components/map";
 import { useLocationStore } from "@/store";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
+import { router } from "expo-router";
 
 const recent_books = [
   {
@@ -123,7 +124,14 @@ const Home = () => {
   const [hasPermissions, setHasPermission] = useState(false);
 
   const handleSignOut = () => {};
-  const handleDestinationPress = () => {};
+  const handleDestinationPress = (location: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  }) => {
+    setDestinationLocation(location);
+    router.push("/(root)/(tabs)/find-mariachi");
+  };
 
   useEffect(() => {
     const requestLocation = async () => {
