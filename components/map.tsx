@@ -1,8 +1,11 @@
-import { calculateRegion } from "@/lib/map";
-import { useLocationStore } from "@/store";
-import MapView, { PROVIDER_DEFAULT } from "react-native-maps";
+import { calculateRegion, generateMarkersFromData } from "@/lib/map";
+import { useLocationStore, useMariachiStore } from "@/store";
+import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
+import { Mariachi, MarkerData } from "@/types/type";
+import { useFetch } from "@/lib/fetch";
+import { icons } from "@/constants";
 
 const safeNumber = (v: any) => {
   const n = Number(v);
@@ -20,45 +23,48 @@ const normalizeRegion = (r: any) => {
 };
 
 const Map = () => {
+  const { destinationLatitude, destinationLongitude } = useLocationStore();
+  const { selectedMariachi, setMariachis } = useMariachiStore();
+
   const {
-    userLongitude,
-    userLatitude,
-    destinationLatitude,
-    destinationLongitude,
-  } = useLocationStore();
-
-  const defaultRegion = {
-    latitude: 25.760100122034252,
-    longitude: -100.27985036858885,
-    latitudeDelta: 0.01,
-    longitudeDelta: 0.01,
-  };
-
-  const [region, setRegion] = useState(defaultRegion);
+    data: drivers,
+    loading,
+    error,
+  } = useFetch<Mariachi[]>("/(api)/driver");
+  const [markers, setMarkers] = useState<MarkerData[]>([]);
 
   useEffect(() => {
-    const uLat = safeNumber(userLatitude);
-    const uLng = safeNumber(userLongitude);
-    if (uLat == null || uLng == null) {
-      return; // coords inválidos, no actualizar región
+    if (Array.isArray(drivers)) {
+      const newMarkers = generateMarkersFromData({
+        data: drivers,
+        destinationLatitude: destinationLatitude ?? 0,
+        destinationLongitude: destinationLongitude ?? 0,
+      });
+
+      setMarkers(newMarkers);
     }
+  }, [drivers, destinationLatitude, destinationLongitude]);
 
-    const rawRegion = calculateRegion?.({
-      userLatitude: uLat,
-      userLongitude: uLng,
-      destinationLatitude: safeNumber(destinationLatitude),
-      destinationLongitude: safeNumber(destinationLongitude),
-    });
+  const region = calculateRegion({
+    userLatitude,
+    userLongitude,
+    destinationLatitude,
+    destinationLongitude,
+  });
 
-    const newRegion = normalizeRegion(rawRegion) ?? {
-      latitude: uLat,
-      longitude: uLng,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-    };
+  if (loading || (!userLatitude && !userLongitude))
+    return (
+      <View className="flex justify-between items-center w-full">
+        <ActivityIndicator size="small" color="#000" />
+      </View>
+    );
 
-    setRegion(newRegion);
-  }, [userLatitude, userLongitude, destinationLatitude, destinationLongitude]);
+  if (error)
+    return (
+      <View className="flex justify-between items-center w-full">
+        <Text>Error: {error}</Text>
+      </View>
+    );
 
   return (
     <View style={{ flex: 1 }}>
@@ -69,7 +75,50 @@ const Map = () => {
         showsUserLocation={true}
         showsMyLocationButton={true}
         mapType="mutedStandard"
-      />
+      >
+        {markers.map((marker, index) => (
+          <Marker
+            key={marker.id}
+            coordinate={{
+              latitude: marker.latitude,
+              longitude: marker.longitude,
+            }}
+            title={marker.name}
+            image={
+              selectedMariachi === +marker.id
+                ? icons.selectedMarker
+                : icons.marker
+            }
+          />
+        ))}
+
+        {destinationLatitude && destinationLongitude && (
+          <>
+            <Marker
+              key="destination"
+              coordinate={{
+                latitude: destinationLatitude,
+                longitude: destinationLongitude,
+              }}
+              title="Destination"
+              image={icons.pin}
+            />
+            <MapViewDirections
+              origin={{
+                latitude: userLatitude!,
+                longitude: userLongitude!,
+              }}
+              destination={{
+                latitude: destinationLatitude,
+                longitude: destinationLongitude,
+              }}
+              apikey={directionsAPI!}
+              strokeColor="#0286FF"
+              strokeWidth={2}
+            />
+          </>
+        )}
+      </MapView>
     </View>
   );
 };
