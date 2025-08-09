@@ -20,8 +20,8 @@ declare interface MarkerData {
 }
 
 declare interface MapProps {
-  Latitude?: number;
-  Longitude?: number;
+  destinationLatitude?: number;
+  destinationLongitude?: number;
   selectedMariachi?: number | null;
   onMapReady?: () => void;
 }
@@ -83,7 +83,6 @@ declare interface PaymentProps {
   email: string;
   amount: string;
   mariachiId: number;
-  ETA_time: number;
 }
 
 declare interface LocationStore {

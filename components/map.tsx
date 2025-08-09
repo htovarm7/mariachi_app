@@ -8,7 +8,7 @@ import { useFetch } from "@/lib/fetch";
 import { icons } from "@/constants";
 import MapViewDirections from "react-native-maps-directions";
 
-const directionsAPI = process.env.EXPO_DIRECTIONS_API_KEY;
+const directionsAPI = process.env.EXPO_PUBLIC_PLACES_API_KEY;
 
 const Map = () => {
   const {
@@ -20,23 +20,23 @@ const Map = () => {
   const { selectedMariachi, setMariachis } = useMariachiStore();
 
   const {
-    data: drivers,
+    data: mariachis,
     loading,
     error,
-  } = useFetch<Mariachi[]>("/(api)/driver");
+  } = useFetch<Mariachi[]>("/(api)/mariachis");
   const [markers, setMarkers] = useState<MarkerData[]>([]);
 
   useEffect(() => {
-    if (Array.isArray(drivers)) {
+    if (Array.isArray(mariachis)) {
       const newMarkers = generateMarkersFromData({
-        data: drivers,
+        data: mariachis,
         destinationLatitude: destinationLatitude ?? 0,
         destinationLongitude: destinationLongitude ?? 0,
       });
 
       setMarkers(newMarkers);
     }
-  }, [drivers, destinationLatitude, destinationLongitude]);
+  }, [mariachis, destinationLatitude, destinationLongitude]);
 
   const region = calculateRegion({
     userLatitude,
@@ -64,14 +64,16 @@ const Map = () => {
       <MapView
         provider={PROVIDER_DEFAULT}
         style={{ flex: 1 }}
-        region={region}
+        tintColor="black"
+        initialRegion={region}
         showsUserLocation={true}
-        showsMyLocationButton={true}
         mapType="mutedStandard"
+        showsPointsOfInterest={false}
+        userInterfaceStyle="light"
       >
         {markers.map((marker, index) => (
           <Marker
-            key={marker.id}
+            key={`mariachi-${marker.id || index}`}
             coordinate={{
               latitude: marker.latitude,
               longitude: marker.longitude,
@@ -88,7 +90,7 @@ const Map = () => {
         {destinationLatitude && destinationLongitude && (
           <>
             <Marker
-              key="destination"
+              key="destination-marker"
               coordinate={{
                 latitude: destinationLatitude,
                 longitude: destinationLongitude,
@@ -97,6 +99,7 @@ const Map = () => {
               image={icons.pin}
             />
             <MapViewDirections
+              key="directions"
               origin={{
                 latitude: userLatitude!,
                 longitude: userLongitude!,
