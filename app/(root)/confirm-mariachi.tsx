@@ -2,65 +2,29 @@ import CustomButton from "@/components/customButton";
 import GroupMariachiCard from "@/components/groupMariachiCard";
 import MariachiCard from "@/components/mariachiCard";
 import MariachiLayout from "@/components/mariachiLayout";
+import { useFetch } from "@/lib/fetch";
 import { useMariachiStore } from "@/store";
+import { Mariachi } from "@/types/type";
 import { router } from "expo-router";
 import { Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
-const showMariachis = [
-  {
-    id: 1,
-    name: "Los Dorados",
-    profile_image_url: "",
-    price: 600,
-    members: 6,
-    rating: 4.8,
-    latitude: 19.4326,
-    longitude: -99.1332,
-  },
-  {
-    id: 2,
-    name: "Dinamita",
-    profile_image_url: "",
-    members: 7,
-    rating: 4.65,
-    price: 400,
-    latitude: 19.427,
-    longitude: -99.1386,
-  },
-  {
-    id: 3,
-    name: "Los regios",
-    profile_image_url: "",
-    members: 5,
-    rating: 4.92,
-    price: 200,
-    latitude: 19.43,
-    longitude: -99.14,
-  },
-  {
-    id: 4,
-    name: "Los Rayos",
-    profile_image_url: "",
-    members: 8,
-    rating: 4.75,
-    price: 500,
-    latitude: 19.435,
-    longitude: -99.13,
-  },
-];
-
 const ConfirmMariachi = () => {
   const { mariachis, selectedMariachi, setSelectedMariachi } =
     useMariachiStore();
+  const {
+    data: mariachi,
+    loading,
+    error,
+  } = useFetch<Mariachi[]>("/(api)/mariachis");
   return (
     <MariachiLayout title="Choose a Mariachi" snapPoints={["65%", "85%"]}>
       <FlatList
-        data={showMariachis}
+        data={mariachi}
         renderItem={({ item }) => (
           <GroupMariachiCard
             selected={selectedMariachi!}
-            setSelected={() => setSelectedMariachi(item.id!)}
+            setSelected={() => setSelectedMariachi(item.mariachi_id!)}
             item={item}
           />
         )}
@@ -69,8 +33,8 @@ const ConfirmMariachi = () => {
             <CustomButton
               title="Select Mariachi"
               onPress={() => {
-                const selectedMariachiData = showMariachis.find(
-                  (m) => m.id === selectedMariachi
+                const selectedMariachiData = mariachi?.find(
+                  (m) => m.mariachi_id === selectedMariachi
                 );
                 router.push({
                   pathname: "/(root)/book-mariachi",

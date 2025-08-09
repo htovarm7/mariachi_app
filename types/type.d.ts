@@ -22,15 +22,11 @@ declare interface MarkerData {
 declare interface MapProps {
   Latitude?: number;
   Longitude?: number;
-  onMariachiTimesCalculated?: (mariachisWithTimes: MarkerData[]) => void;
   selectedMariachi?: number | null;
   onMapReady?: () => void;
 }
 
 declare interface Booking {
-  origin_address: string;
-  origin_latitude: number;
-  origin_longitude: number;
   destination_address: string;
   destination_latitude: number;
   destination_longitude: number;
