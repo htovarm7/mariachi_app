@@ -3,6 +3,7 @@ import { TextInputProps, TouchableOpacityProps } from "react-native";
 declare interface Mariachi {
   mariachi_id: number;
   name: string;
+  profile_image_url: string;
   members: number;
   rating: number;
 }
@@ -12,23 +13,20 @@ declare interface MarkerData {
   longitude: number;
   id: number;
   members: number;
+  profile_image_url: string;
   rating: number;
   name: string;
-  price?: string;
+  price?: number;
 }
 
 declare interface MapProps {
-  Latitude?: number;
-  Longitude?: number;
-  onMariachiTimesCalculated?: (mariachisWithTimes: MarkerData[]) => void;
+  destinationLatitude?: number;
+  destinationLongitude?: number;
   selectedMariachi?: number | null;
   onMapReady?: () => void;
 }
 
 declare interface Booking {
-  origin_address: string;
-  origin_latitude: number;
-  origin_longitude: number;
   destination_address: string;
   destination_latitude: number;
   destination_longitude: number;
@@ -85,7 +83,6 @@ declare interface PaymentProps {
   email: string;
   amount: string;
   mariachiId: number;
-  ETA_time: number;
 }
 
 declare interface LocationStore {

@@ -1,9 +1,10 @@
+import { View, Image } from "react-native";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import "react-native-get-random-values";
 import { icons } from "@/constants";
 import { GoogleInputProps } from "@/types/type";
-import { Text, View, Image } from "react-native";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
-const googlePlacesApiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
+const googlePlacesApiKey = process.env.EXPO_PUBLIC_PLACES_API_KEY;
 
 const GoogleTextInput = ({
   icon,
@@ -12,14 +13,22 @@ const GoogleTextInput = ({
   textInputBackgroundColor,
   handlePress,
 }: GoogleInputProps) => {
+  if (!googlePlacesApiKey) {
+    console.warn("Google Places API Key no está configurada");
+    return null;
+  }
+
   return (
     <View
-      className={`flex flex-row items-center justify-center relative z-50 rounded-xl ${containerStyle} mb-5`}
+      className={`flex flex-row items-center justify-center relative z-50 rounded-xl ${containerStyle}`}
     >
       <GooglePlacesAutocomplete
         fetchDetails={true}
-        placeholder="Location of Serenata"
+        placeholder="Search"
         debounce={200}
+        minLength={2}
+        enablePoweredByContainer={false}
+        keepResultsAfterBlur={true}
         styles={{
           textInputContainer: {
             alignItems: "center",
@@ -30,7 +39,9 @@ const GoogleTextInput = ({
             shadowColor: "#d4d4d4",
           },
           textInput: {
-            backgroundColor: textInputBackgroundColor || "white",
+            backgroundColor: textInputBackgroundColor
+              ? textInputBackgroundColor
+              : "white",
             fontSize: 16,
             fontWeight: "600",
             marginTop: 5,
@@ -38,13 +49,16 @@ const GoogleTextInput = ({
             borderRadius: 200,
           },
           listView: {
-            backgroundColor: textInputBackgroundColor || "white",
+            backgroundColor: textInputBackgroundColor
+              ? textInputBackgroundColor
+              : "white",
             position: "relative",
             top: 0,
             width: "100%",
             borderRadius: 10,
             shadowColor: "#d4d4d4",
             zIndex: 99,
+            maxHeight: 200,
           },
         }}
         onPress={(data, details = null) => {
@@ -57,7 +71,16 @@ const GoogleTextInput = ({
         query={{
           key: googlePlacesApiKey,
           language: "en",
+          types: "establishment|geocode",
+          components: "country:us|country:mx",
         }}
+        GooglePlacesSearchQuery={{
+          rankby: "distance",
+        }}
+        filterReverseGeocodingByTypes={[
+          "locality",
+          "administrative_area_level_3",
+        ]}
         renderLeftButton={() => (
           <View className="justify-center items-center w-6 h-6">
             <Image
@@ -69,7 +92,14 @@ const GoogleTextInput = ({
         )}
         textInputProps={{
           placeholderTextColor: "gray",
-          placeholder: initialLocation ?? "Where the serenata?",
+          placeholder: initialLocation ?? "Where is going to be the serenade?",
+          autoCorrect: false,
+          autoCapitalize: "none",
+        }}
+        predefinedPlaces={[]}
+        nearbyPlacesAPI="GooglePlacesSearch"
+        GooglePlacesDetailsQuery={{
+          fields: "formatted_address,geometry",
         }}
       />
     </View>

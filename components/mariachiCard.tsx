@@ -9,7 +9,6 @@ const MariachiCard = ({
     destination_latitude,
     destination_longitude,
     destination_address,
-    origin_address,
     created_at,
     mariachi,
     payment_status,
@@ -31,12 +30,6 @@ const MariachiCard = ({
             className="w-[80px] h-[90px] rounded-lg"
           />
           <View className="flex flex-col mx-5 gap-y-5 flex-1">
-            <View className="flex flex-row items-center gap-x-2">
-              <Image source={icons.to} className="w-5 h-5" />
-              <Text className="text-md font-FunnelSansMedium" numberOfLines={1}>
-                {origin_address}
-              </Text>
-            </View>
             <View className="flex flex-row items-center gap-x-2">
               <Image source={icons.point} className="w-5 h-5" />
               <Text className="text-md font-FunnelSansMedium" numberOfLines={1}>

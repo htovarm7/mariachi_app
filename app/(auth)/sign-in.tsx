@@ -3,7 +3,7 @@ import InputField from "@/components/inputField";
 import OAuth from "@/components/OAuth";
 import { Link, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import { Text, ScrollView, View, Image } from "react-native";
+import { Text, ScrollView, View, Image, Alert } from "react-native";
 import { useSignIn } from "@clerk/clerk-expo";
 import { icons } from "@/constants/index";
 
@@ -30,8 +30,26 @@ const SignIn = () => {
       } else {
         console.error(JSON.stringify(signInAttempt, null, 2));
       }
-    } catch (err) {
-      console.error(JSON.stringify(err, null, 2));
+    } catch (err: any) {
+      //console.error(JSON.stringify(err, null, 2));
+      let errorMessage = "Error al iniciar sesión";
+
+      if (err.errors && err.errors.length > 0) {
+        const errorCode = err.errors[0].code;
+
+        if (errorCode === "form_password_incorrect") {
+          errorMessage = "Contraseña incorrecta";
+        } else if (errorCode === "form_identifier_not_found") {
+          errorMessage = "Email no encontrado";
+        } else if (errorCode === "form_password_pwned") {
+          errorMessage =
+            "Esta contraseña ha sido comprometida, por favor usa otra";
+        } else {
+          errorMessage = err.errors[0].message || "Error al iniciar sesión";
+        }
+      }
+
+      Alert.alert("Error", errorMessage, [{ text: "OK" }]);
     }
   }, [isLoaded, form.email, form.password]);
 
@@ -57,8 +75,8 @@ const SignIn = () => {
             label="Password"
             placeholder="Enter your password"
             icon={icons.password}
-            secureTextEntry={true}
             value={form.password}
+            secureTextEntry={true}
             onChangeText={(value) => setForm({ ...form, password: value })}
           />
 

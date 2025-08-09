@@ -5,6 +5,7 @@ import "../global.css";
 import { useEffect } from "react";
 import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
 import { tokenCache } from "@clerk/clerk-expo/token-cache";
+import "react-native-get-random-values";
 
 SplashScreen.preventAutoHideAsync();
 

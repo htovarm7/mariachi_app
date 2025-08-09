@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import MariachiCard from "@/components/mariachiCard";
-import { useUser } from "@clerk/clerk-expo";
+import { useUser, useAuth } from "@clerk/clerk-expo";
 import { icons, images } from "@/constants";
 import GoogleTextInput from "@/components/googleTextInput";
 import Map from "@/components/map";
@@ -121,42 +121,58 @@ const recent_books = [
 ];
 
 const Home = () => {
-  const { setUserLocation, setDestinationLocation } = useLocationStore();
+  const {
+    setUserLocation,
+    setDestinationLocation,
+    userLatitude,
+    userLongitude,
+  } = useLocationStore();
   const { user } = useUser();
+  const { signOut } = useAuth();
   const loading = false;
 
-  const [hasPermissions, setHasPermission] = useState(false);
+  const [hasPermissions, setHasPermission] = useState<boolean>(false);
 
-  const handleSignOut = () => {};
+  const handleSignOut = () => {
+    signOut();
+    router.replace("/(auth)/sign-in");
+  };
+
   const handleDestinationPress = (location: {
     latitude: number;
     longitude: number;
     address: string;
   }) => {
     setDestinationLocation(location);
+    router.push("/(root)/select-mariachi");
   };
 
   useEffect(() => {
-    const requestLocation = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        setHasPermission(false);
-        return;
+    (async () => {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          setHasPermission(false);
+          return;
+        }
+
+        setHasPermission(true);
+        let location = await Location.getCurrentPositionAsync({});
+
+        const address = await Location.reverseGeocodeAsync({
+          latitude: location.coords?.latitude!,
+          longitude: location.coords?.longitude!,
+        });
+
+        setUserLocation({
+          latitude: location.coords?.latitude,
+          longitude: location.coords?.longitude,
+          address: `${address[0].name}, ${address[0].region}`,
+        });
+      } catch (error) {
+        console.error("Error getting location:", error);
       }
-      let location = await Location.getCurrentPositionAsync();
-
-      const address = await Location.reverseGeocodeAsync({
-        latitude: location.coords?.latitude!,
-        longitude: location.coords?.longitude!,
-      });
-
-      setUserLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        address: `${address[0].name}, ${address[0].region}`,
-      });
-    };
-    requestLocation();
+    })();
   }, []);
 
   return (
@@ -164,6 +180,7 @@ const Home = () => {
       <FlatList
         data={recent_books?.slice(0, 5)}
         renderItem={({ item }) => <MariachiCard Booking={item} />}
+        keyExtractor={(item, index) => index.toString()}
         className="px-5"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -187,11 +204,8 @@ const Home = () => {
         ListHeaderComponent={() => (
           <>
             <View className="flex flex-row items-center justify-between my-5">
-              <Text className="text-2xl capitalize font-FunnelSansExtraBold">
-                Welcome,{" "}
-                {user?.firstName ||
-                  user?.emailAddresses[0].emailAddress.split("@")[0]}
-                👋
+              <Text className="text-2xl font-JakartaExtraBold">
+                Welcome {user?.firstName || "User"}👋
               </Text>
               <TouchableOpacity
                 onPress={handleSignOut}
@@ -206,16 +220,19 @@ const Home = () => {
               containerStyle="bg-white shadow-md shadow-neutral-300"
               handlePress={handleDestinationPress}
             />
-            <>
-              <Text className="text-xl font-FunnelSansBold mt-5 mb-3">
-                Your Current Location
-              </Text>
-              <View className="flex flex-row items-center bg-transparent h-[300px]">
-                <Map />
-              </View>
-            </>
 
-            <Text className="text-xl font-FunnelSansBold mt-5 mb-3">
+            {hasPermissions && userLatitude && userLongitude && (
+              <>
+                <Text className="text-xl font-JakartaBold mt-5 mb-3">
+                  Your current location
+                </Text>
+                <View className="flex flex-row items-center bg-transparent h-[300px]">
+                  <Map />
+                </View>
+              </>
+            )}
+
+            <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Recent Bookings
             </Text>
           </>

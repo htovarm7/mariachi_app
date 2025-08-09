@@ -1,4 +1,4 @@
-import { LocationStore } from "@/types/type";
+import { LocationStore, mariachiStore, MarkerData } from "@/types/type";
 import { create } from "zustand";
 
 export const useLocationStore = create<LocationStore>((set) => ({
@@ -20,7 +20,7 @@ export const useLocationStore = create<LocationStore>((set) => ({
     set(() => ({
       userLatitude: latitude,
       userLongitude: longitude,
-      userAdress: address,
+      userAddress: address,
     }));
   },
   setDestinationLocation: ({
@@ -38,4 +38,14 @@ export const useLocationStore = create<LocationStore>((set) => ({
       destinationAddress: address,
     }));
   },
+}));
+
+export const useMariachiStore = create<mariachiStore>((set) => ({
+  mariachis: [] as MarkerData[],
+  selectedMariachi: null,
+  setSelectedMariachi: (mariachiId: number) =>
+    set(() => ({ selectedMariachi: mariachiId })),
+  setMariachis: (mariachis: MarkerData[]) =>
+    set(() => ({ mariachis: mariachis })),
+  clearSelectedMariachi: () => set(() => ({ selectedMariachi: null })),
 }));

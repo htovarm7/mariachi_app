@@ -4,12 +4,12 @@ const directionsAPI = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
 export const generateMarkersFromData = ({
   data,
-  userLatitude,
-  userLongitude,
+  destinationLatitude,
+  destinationLongitude,
 }: {
   data: Mariachi[];
-  userLatitude: number;
-  userLongitude: number;
+  destinationLatitude: number;
+  destinationLongitude: number;
 }): MarkerData[] => {
   return data.map((mariachi) => {
     const latOffset = (Math.random() - 0.5) * 0.01;
@@ -17,9 +17,10 @@ export const generateMarkersFromData = ({
 
     return {
       id: mariachi.mariachi_id,
-      latitude: userLatitude + latOffset,
-      longitude: userLongitude + lngOffset,
+      latitude: destinationLatitude + latOffset,
+      longitude: destinationLongitude + lngOffset,
       members: mariachi.members,
+      profile_image_url: mariachi.profile_image_url,
       rating: mariachi.rating,
       name: mariachi.name,
     };
@@ -72,52 +73,4 @@ export const calculateRegion = ({
     latitudeDelta,
     longitudeDelta,
   };
-};
-
-export const calculateArriveTimes = async ({
-  markers,
-  userLatitude,
-  userLongitude,
-  destinationLatitude,
-  destinationLongitude,
-}: {
-  markers: MarkerData[];
-  userLatitude: number | null;
-  userLongitude: number | null;
-  destinationLatitude: number | null;
-  destinationLongitude: number | null;
-}) => {
-  if (
-    !userLatitude ||
-    !userLongitude ||
-    !destinationLatitude ||
-    !destinationLongitude
-  )
-    return;
-
-  try {
-    const timesPromises = markers.map(async (marker) => {
-      const responseToUser = await fetch(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${marker.latitude},${marker.longitude}&destination=${userLatitude},${userLongitude}&key=${directionsAPI}`
-      );
-      const dataToUser = await responseToUser.json();
-      const timeToUser = dataToUser.routes[0].legs[0].duration.value;
-
-      const responseToDestination = await fetch(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${userLatitude},${userLongitude}&destination=${destinationLatitude},${destinationLongitude}&key=${directionsAPI}`
-      );
-      const dataToDestination = await responseToDestination.json();
-      const timeToDestination =
-        dataToDestination.routes[0].legs[0].duration.value;
-
-      const totalTime = (timeToUser + timeToDestination) / 60;
-      const price = (totalTime * 0.7).toFixed(2);
-
-      return { ...marker, time: totalTime, price };
-    });
-
-    return await Promise.all(timesPromises);
-  } catch (error) {
-    console.error("Error calculating arrive  times:", error);
-  }
 };
