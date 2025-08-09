@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import MariachiCard from "@/components/mariachiCard";
-import { useUser } from "@clerk/clerk-expo";
+import { useUser, useAuth } from "@clerk/clerk-expo";
 import { icons, images } from "@/constants";
 import GoogleTextInput from "@/components/googleTextInput";
 import Map from "@/components/map";
@@ -121,14 +121,23 @@ const recent_books = [
 ];
 
 const Home = () => {
-  const { setUserLocation, setDestinationLocation, userLocation } =
-    useLocationStore();
+  const {
+    setUserLocation,
+    setDestinationLocation,
+    userLatitude,
+    userLongitude,
+  } = useLocationStore();
   const { user } = useUser();
+  const { signOut } = useAuth();
   const loading = false;
 
-  const [hasPermissions, setHasPermission] = useState(false);
+  const [hasPermissions, setHasPermission] = useState<boolean>(false);
 
-  const handleSignOut = () => {};
+  const handleSignOut = () => {
+    signOut();
+    router.replace("/(auth)/sign-in");
+  };
+
   const handleDestinationPress = (location: {
     latitude: number;
     longitude: number;
@@ -139,35 +148,40 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const requestLocation = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setHasPermission(false);
-        return;
+    (async () => {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          setHasPermission(false);
+          return;
+        }
+
+        setHasPermission(true);
+        let location = await Location.getCurrentPositionAsync({});
+        console.log("User location:", location.coords);
+
+        const address = await Location.reverseGeocodeAsync({
+          latitude: location.coords?.latitude!,
+          longitude: location.coords?.longitude!,
+        });
+
+        setUserLocation({
+          latitude: location.coords?.latitude,
+          longitude: location.coords?.longitude,
+          address: `${address[0].name}, ${address[0].region}`,
+        });
+      } catch (error) {
+        console.error("Error getting location:", error);
       }
-
-      setHasPermission(true);
-      let location = await Location.getCurrentPositionAsync();
-
-      const address = await Location.reverseGeocodeAsync({
-        latitude: location.coords?.latitude!,
-        longitude: location.coords?.longitude!,
-      });
-
-      setUserLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        address: `${address[0].name}, ${address[0].region}`,
-      });
-    };
-    requestLocation();
+    })();
   }, []);
 
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
-        data={recent_books || []}
+        data={recent_books?.slice(0, 5)}
         renderItem={({ item }) => <MariachiCard Booking={item} />}
+        keyExtractor={(item, index) => index.toString()}
         className="px-5"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -206,11 +220,9 @@ const Home = () => {
               icon={icons.search}
               containerStyle="bg-white shadow-md shadow-neutral-300"
               handlePress={handleDestinationPress}
-              initialLocation=""
-              textInputBackgroundColor="transparent"
             />
 
-            {hasPermissions && userLocation && (
+            {hasPermissions && userLatitude && userLongitude && (
               <>
                 <Text className="text-xl font-JakartaBold mt-5 mb-3">
                   Your current location
@@ -220,6 +232,7 @@ const Home = () => {
                 </View>
               </>
             )}
+
             <Text className="text-xl font-JakartaBold mt-5 mb-3">
               Recent Bookings
             </Text>

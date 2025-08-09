@@ -18,7 +18,7 @@ const MariachiLayout = ({
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <View className="flex-1 bg-white">
         <View className="flex flex-col h-screen bg-blue-500">
           <View className="flex flex-row absolute z-10 top-16 items-center justify-start px-5">
@@ -38,15 +38,16 @@ const MariachiLayout = ({
 
           <Map />
         </View>
+
         <BottomSheet
           ref={bottomSheetRef}
           snapPoints={snapPoints || ["40%", "85%"]}
           index={0}
-          children={undefined}
-        />
-        <BottomSheetView style={{ flex: 1, padding: 20 }}>
-          {children}
-        </BottomSheetView>
+        >
+          <BottomSheetView style={{ flex: 1, padding: 20 }}>
+            {children}
+          </BottomSheetView>
+        </BottomSheet>
       </View>
     </GestureHandlerRootView>
   );

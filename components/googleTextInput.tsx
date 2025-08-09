@@ -4,7 +4,7 @@ import "react-native-get-random-values";
 import { icons } from "@/constants";
 import { GoogleInputProps } from "@/types/type";
 
-const googlePlacesApiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
+const googlePlacesApiKey = process.env.EXPO_PUBLIC_PLACES_API_KEY;
 
 const GoogleTextInput = ({
   icon,
@@ -13,7 +13,6 @@ const GoogleTextInput = ({
   textInputBackgroundColor,
   handlePress,
 }: GoogleInputProps) => {
-  // Verificar que la API key existe
   if (!googlePlacesApiKey) {
     console.warn("Google Places API Key no está configurada");
     return null;
@@ -27,9 +26,6 @@ const GoogleTextInput = ({
         fetchDetails={true}
         placeholder="Search"
         debounce={200}
-        minLengthAutocomplete={2}
-        enablePoweredByContainer={false}
-        listEmptyComponent={() => null}
         styles={{
           textInputContainer: {
             alignItems: "center",
@@ -53,32 +49,24 @@ const GoogleTextInput = ({
             backgroundColor: textInputBackgroundColor
               ? textInputBackgroundColor
               : "white",
-            position: "absolute",
-            top: 50,
+            position: "relative",
+            top: 0,
             width: "100%",
             borderRadius: 10,
             shadowColor: "#d4d4d4",
             zIndex: 99,
-            maxHeight: 200,
           },
         }}
         onPress={(data, details = null) => {
-          if (details?.geometry?.location) {
-            handlePress({
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-              address: data.description,
-            });
-          }
-        }}
-        onFail={(error) => {
-          console.log("GooglePlacesAutocomplete Error:", error);
+          handlePress({
+            latitude: details?.geometry.location.lat!,
+            longitude: details?.geometry.location.lng!,
+            address: data.description,
+          });
         }}
         query={{
           key: googlePlacesApiKey,
           language: "en",
-          types: "establishment|geocode",
-          components: "country:mx", // Limitar a México si es relevante
         }}
         renderLeftButton={() => (
           <View className="justify-center items-center w-6 h-6">
@@ -91,13 +79,8 @@ const GoogleTextInput = ({
         )}
         textInputProps={{
           placeholderTextColor: "gray",
-          placeholder: initialLocation ?? "Where the serenade?",
-          returnKeyType: "search",
+          placeholder: initialLocation ?? "Where is going to be the serenade?",
         }}
-        filterReverseGeocodingByTypes={[
-          "locality",
-          "administrative_area_level_3",
-        ]}
         predefinedPlaces={[]}
       />
     </View>
