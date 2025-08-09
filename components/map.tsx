@@ -6,24 +6,17 @@ import { ActivityIndicator, Text, View } from "react-native";
 import { Mariachi, MarkerData } from "@/types/type";
 import { useFetch } from "@/lib/fetch";
 import { icons } from "@/constants";
+import MapViewDirections from "react-native-maps-directions";
 
-const safeNumber = (v: any) => {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : null;
-};
-
-const normalizeRegion = (r: any) => {
-  if (!r) return null;
-  const latitude = safeNumber(r.latitude ?? r.lat ?? r.latitud ?? r[0]);
-  const longitude = safeNumber(r.longitude ?? r.lng ?? r.lon ?? r[1]);
-  const latitudeDelta = safeNumber(r.latitudeDelta ?? r.latDelta) ?? 0.01;
-  const longitudeDelta = safeNumber(r.longitudeDelta ?? r.lngDelta) ?? 0.01;
-  if (latitude == null || longitude == null) return null;
-  return { latitude, longitude, latitudeDelta, longitudeDelta };
-};
+const directionsAPI = process.env.EXPO_DIRECTIONS_API_KEY;
 
 const Map = () => {
-  const { destinationLatitude, destinationLongitude } = useLocationStore();
+  const {
+    destinationLatitude,
+    destinationLongitude,
+    userLatitude,
+    userLongitude,
+  } = useLocationStore();
   const { selectedMariachi, setMariachis } = useMariachiStore();
 
   const {
