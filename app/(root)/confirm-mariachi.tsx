@@ -7,13 +7,16 @@ import { router } from "expo-router";
 import { Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
-const mariachis = [
+const showMariachis = [
   {
     id: 1,
     name: "Los Dorados",
     profile_image_url: "",
+    price: 600,
     members: 6,
     rating: 4.8,
+    latitude: 19.4326,
+    longitude: -99.1332,
   },
   {
     id: 2,
@@ -21,6 +24,9 @@ const mariachis = [
     profile_image_url: "",
     members: 7,
     rating: 4.65,
+    price: 400,
+    latitude: 19.427,
+    longitude: -99.1386,
   },
   {
     id: 3,
@@ -28,6 +34,9 @@ const mariachis = [
     profile_image_url: "",
     members: 5,
     rating: 4.92,
+    price: 200,
+    latitude: 19.43,
+    longitude: -99.14,
   },
   {
     id: 4,
@@ -35,6 +44,9 @@ const mariachis = [
     profile_image_url: "",
     members: 8,
     rating: 4.75,
+    price: 500,
+    latitude: 19.435,
+    longitude: -99.13,
   },
 ];
 
@@ -44,7 +56,7 @@ const ConfirmMariachi = () => {
   return (
     <MariachiLayout title="Choose a Mariachi" snapPoints={["65%", "85%"]}>
       <FlatList
-        data={mariachis}
+        data={showMariachis}
         renderItem={({ item }) => (
           <GroupMariachiCard
             selected={selectedMariachi!}
@@ -57,7 +69,13 @@ const ConfirmMariachi = () => {
             <CustomButton
               title="Select Mariachi"
               onPress={() => {
-                router.push("/(root)/book-mariachi");
+                const selectedMariachiData = showMariachis.find(
+                  (m) => m.id === selectedMariachi
+                );
+                router.push({
+                  pathname: "/(root)/book-mariachi",
+                  params: { mariachi: JSON.stringify(selectedMariachiData) },
+                });
               }}
             />
           </View>

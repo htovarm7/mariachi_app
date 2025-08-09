@@ -17,7 +17,6 @@ const SelectMariachi = () => {
   return (
     <MariachiLayout title="Mariachi" snapPoints={["85%"]}>
       <View className="my-3">
-        <Text className="text-xl font-FunnelSansSemiBold mb-3">To</Text>
         <GoogleTextInput
           icon={icons.target}
           initialLocation={userAddress ?? undefined}

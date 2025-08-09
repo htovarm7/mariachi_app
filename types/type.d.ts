@@ -3,6 +3,7 @@ import { TextInputProps, TouchableOpacityProps } from "react-native";
 declare interface Mariachi {
   mariachi_id: number;
   name: string;
+  profile_image_url: string;
   members: number;
   rating: number;
 }
@@ -12,9 +13,10 @@ declare interface MarkerData {
   longitude: number;
   id: number;
   members: number;
+  profile_image_url: string;
   rating: number;
   name: string;
-  price?: string;
+  price?: number;
 }
 
 declare interface MapProps {

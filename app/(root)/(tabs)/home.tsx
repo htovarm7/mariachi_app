@@ -158,7 +158,6 @@ const Home = () => {
 
         setHasPermission(true);
         let location = await Location.getCurrentPositionAsync({});
-        console.log("User location:", location.coords);
 
         const address = await Location.reverseGeocodeAsync({
           latitude: location.coords?.latitude!,
