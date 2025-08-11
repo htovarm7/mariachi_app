@@ -8,11 +8,27 @@ import { icons } from "@/constants";
 import { useLocationStore } from "@/store";
 import Payment from "@/components/payment";
 import { useEffect, useState } from "react";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import { Platform } from "react-native";
 
 const BookRide = () => {
   const { user } = useUser();
   const { destinationAddress } = useLocationStore();
   const { mariachi } = useLocalSearchParams();
+
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    if (event.type === "set" && selectedDate) {
+      setDate(selectedDate);
+    }
+    setShowDatePicker(false);
+    setShowTimePicker(false);
+  };
 
   const MariachiDetails = mariachi ? JSON.parse(mariachi as string) : null;
 
@@ -79,6 +95,47 @@ const BookRide = () => {
                 {destinationAddress}
               </Text>
             </View>
+          </View>
+          <View className="flex flex-col w-full items-start justify-center mt-2 space-y-4">
+            <Text className="text-xl font-JakartaBold font-bold">
+              Fecha y hora de la reserva
+            </Text>
+
+            <View className="flex flex-row items-center justify-between w-full">
+              <View className="flex-1 mr-2">
+                <Text className="text-lg font-JakartaRegular mb-2">Fecha:</Text>
+                <Text
+                  onPress={() => setShowDatePicker(true)}
+                  className="text-lg font-JakartaMedium p-3 bg-general-600 rounded-xl"
+                >
+                  {date.toLocaleDateString()}
+                </Text>
+              </View>
+
+              <View className="flex-1 ml-2">
+                <Text className="text-lg font-JakartaRegular mb-2">Hora:</Text>
+                <Text
+                  onPress={() => setShowTimePicker(true)}
+                  className="text-lg font-JakartaMedium p-3 bg-general-600 rounded-xl"
+                >
+                  {date.toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </Text>
+              </View>
+            </View>
+
+            {(showDatePicker || showTimePicker) && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={showDatePicker ? "date" : "time"}
+                is24Hour={true}
+                onChange={onChange}
+                minimumDate={new Date()}
+              />
+            )}
           </View>
           <Payment
             fullName={user?.fullName!}

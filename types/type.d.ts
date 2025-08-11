@@ -1,5 +1,6 @@
 import { TextInputProps, TouchableOpacityProps } from "react-native";
 
+// Interface for the mariachi
 declare interface Mariachi {
   mariachi_id: number;
   name: string;
@@ -8,6 +9,7 @@ declare interface Mariachi {
   rating: number;
 }
 
+// Data that will appear on the map
 declare interface MarkerData {
   latitude: number;
   longitude: number;
@@ -19,6 +21,7 @@ declare interface MarkerData {
   price?: number;
 }
 
+// Props for the map component
 declare interface MapProps {
   destinationLatitude?: number;
   destinationLongitude?: number;
@@ -36,6 +39,7 @@ declare interface Booking {
   mariachi_id: number;
   user_email: string;
   created_at: string;
+  reserved_at: string;
   mariachi: {
     name: string;
     members: number;

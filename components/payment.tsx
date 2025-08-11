@@ -109,7 +109,7 @@ const Payment = ({ fullName, email, amount, mariachiId }: PaymentProps) => {
   return (
     <>
       <CustomButton
-        title="Confirm Ride"
+        title="Confirm Booking"
         className="my-10"
         onPress={openPaymentSheet}
       />

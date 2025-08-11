@@ -15,6 +15,7 @@ import Map from "@/components/map";
 import { useLocationStore } from "@/store";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
+import * as Calendar from "expo-calendar";
 import { router } from "expo-router";
 
 const recent_books = [
@@ -171,6 +172,17 @@ const Home = () => {
         });
       } catch (error) {
         console.error("Error getting location:", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Calendar.requestCalendarPermissionsAsync();
+      if (status === "granted") {
+        const calendars = await Calendar.getCalendarsAsync(
+          Calendar.EntityTypes.EVENT
+        );
       }
     })();
   }, []);
