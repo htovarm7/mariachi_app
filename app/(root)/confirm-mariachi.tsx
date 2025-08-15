@@ -28,7 +28,7 @@ const ConfirmMariachi = () => {
         ListFooterComponent={() => (
           <View className="mx-5 mt-10">
             <CustomButton
-              title="Select Ride"
+              title="Select Mariachi"
               onPress={() => router.push("/(root)/book-mariachi")}
             />
           </View>

@@ -145,7 +145,7 @@ const Home = () => {
     address: string;
   }) => {
     setDestinationLocation(location);
-    router.push("/(root)/select-mariachi");
+    router.push("/(root)/confirm-mariachi");
   };
 
   useEffect(() => {

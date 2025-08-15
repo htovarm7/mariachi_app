@@ -6,7 +6,6 @@ export default function Layout() {
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="select-mariachi" options={{ headerShown: false }} />
       <Stack.Screen name="confirm-mariachi" options={{ headerShown: false }} />
       <Stack.Screen name="book-mariachi" options={{ headerShown: false }} />
     </Stack>
