@@ -8,7 +8,23 @@ import { useFetch } from "@/lib/fetch";
 import { icons } from "@/constants";
 import MapViewDirections from "react-native-maps-directions";
 
-const directionsAPI = process.env.EXPO_PUBLIC_PLACES_API_KEY;
+const directionsAPI = process.env.EXPO_PUBLIC_DIRECTIONS_API_KEY;
+
+// Helper function to validate coordinates
+const isValidCoordinate = (lat: number, lng: number): boolean => {
+  return (
+    !isNaN(lat) &&
+    !isNaN(lng) &&
+    isFinite(lat) &&
+    isFinite(lng) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    lng >= -180 &&
+    lng <= 180 &&
+    lat !== 0 &&
+    lng !== 0
+  );
+};
 
 const Map = () => {
   const {
@@ -20,6 +36,8 @@ const Map = () => {
   const {
     selectedMariachi,
     setMariachis,
+    setSelectedMariachi,
+    clearSelectedMariachi,
     mariachis: storedMariachis,
   } = useMariachiStore();
 
@@ -32,28 +50,44 @@ const Map = () => {
 
   useEffect(() => {
     if (Array.isArray(mariachis)) {
+      console.log("Raw mariachis data:", mariachis);
       const newMarkers = generateMarkersFromData({
         data: mariachis,
         destinationLatitude: destinationLatitude ?? 0,
         destinationLongitude: destinationLongitude ?? 0,
       });
 
+      console.log("Generated markers:", newMarkers);
       setMarkers(newMarkers);
+      setMariachis(newMarkers);
     }
-  }, [mariachis, destinationLatitude, destinationLongitude]);
-
-  const region = calculateRegion({
-    userLatitude,
-    userLongitude,
-    destinationLatitude,
-    destinationLongitude,
-  });
+  }, [mariachis, destinationLatitude, destinationLongitude, setMariachis]);
 
   const selectedMariachiData = storedMariachis.find(
     (mariachi) => mariachi.id === selectedMariachi
   );
 
-  if (loading || (!userLatitude && !userLongitude))
+  const region = calculateRegion({
+    destinationLatitude,
+    destinationLongitude,
+    selectedMariachiLatitude: selectedMariachiData?.Mariachilatitude,
+    selectedMariachiLongitude: selectedMariachiData?.Mariachilongitude,
+    userLatitude,
+    userLongitude,
+  });
+
+  console.log("Map Debug:", {
+    selectedMariachi,
+    selectedMariachiData,
+    destinationLatitude,
+    destinationLongitude,
+    directionsAPI: directionsAPI ? "API Key Present" : "API Key Missing",
+    markersCount: markers.length,
+    mariachisFromAPI: mariachis?.length || 0,
+    mariachisData: mariachis,
+  });
+
+  if (loading)
     return (
       <View className="flex justify-between items-center w-full">
         <ActivityIndicator size="small" color="#000" />
@@ -88,41 +122,69 @@ const Map = () => {
             }}
             title={marker.name}
             image={
-              selectedMariachi === +marker.id
+              selectedMariachi === marker.id
                 ? icons.selectedMarker
                 : icons.marker
             }
+            onPress={() => {
+              console.log("Marker pressed:", marker.id, marker.name);
+              // Toggle selección del mariachi
+              if (selectedMariachi === marker.id) {
+                console.log("Deseleccionando mariachi:", marker.id);
+                clearSelectedMariachi(); // Deseleccionar si ya está seleccionado
+              } else {
+                console.log("Seleccionando mariachi:", marker.id);
+                setSelectedMariachi(marker.id); // Seleccionar nuevo mariachi
+              }
+            }}
           />
         ))}
 
+        {/* Mostrar marcador de destino cuando hay destino */}
+        {destinationLatitude && destinationLongitude && (
+          <Marker
+            key="destination-marker"
+            coordinate={{
+              latitude: destinationLatitude,
+              longitude: destinationLongitude,
+            }}
+            title="Destino"
+            image={icons.pin}
+          />
+        )}
+
+        {/* Mostrar direcciones solo cuando hay mariachi seleccionado */}
         {destinationLatitude &&
           destinationLongitude &&
-          selectedMariachiData && (
-            <>
-              <Marker
-                key="destination-marker"
-                coordinate={{
-                  latitude: destinationLatitude,
-                  longitude: destinationLongitude,
-                }}
-                title="Destination"
-                image={icons.pin}
-              />
-              <MapViewDirections
-                key="directions"
-                origin={{
-                  latitude: selectedMariachiData.Mariachilatitude!,
-                  longitude: selectedMariachiData.Mariachilongitude!,
-                }}
-                destination={{
-                  latitude: destinationLatitude,
-                  longitude: destinationLongitude,
-                }}
-                apikey={directionsAPI!}
-                strokeColor="#0286FF"
-                strokeWidth={2}
-              />
-            </>
+          selectedMariachiData &&
+          selectedMariachiData.Mariachilatitude &&
+          selectedMariachiData.Mariachilongitude &&
+          directionsAPI &&
+          isValidCoordinate(
+            selectedMariachiData.Mariachilatitude,
+            selectedMariachiData.Mariachilongitude
+          ) &&
+          isValidCoordinate(destinationLatitude, destinationLongitude) && (
+            <MapViewDirections
+              key="directions"
+              origin={{
+                latitude: selectedMariachiData.Mariachilatitude,
+                longitude: selectedMariachiData.Mariachilongitude,
+              }}
+              destination={{
+                latitude: destinationLatitude,
+                longitude: destinationLongitude,
+              }}
+              apikey={directionsAPI}
+              strokeColor="#0286FF"
+              strokeWidth={2}
+              onError={(errorMessage) => {
+                console.log("MapViewDirections Error:", errorMessage);
+              }}
+              onReady={(result) => {
+                console.log("Route found:", result.distance, result.duration);
+              }}
+            />
           )}
       </MapView>
     </View>

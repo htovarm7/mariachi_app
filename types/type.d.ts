@@ -8,10 +8,10 @@ declare interface Mariachi {
   profile_image_url: string;
   members: number;
   rating: number;
-  serenata_time: number;
+  serenade_time: number;
   price: number;
-  latitude: number;
-  longitude: number;
+  mariachilatitude: number;
+  mariachilongitude: number;
 }
 
 // Data that will appear on the map
@@ -19,16 +19,21 @@ declare interface MarkerData {
   Mariachilatitude: number;
   Mariachilongitude: number;
   id: number;
+  mariachi_id?: number;
   members: number;
   profile_image_url: string;
   rating: number;
   name: string;
+  price?: number;
+  serenadeTime?: number;
 }
 
 // Props for the map component
 declare interface MapProps {
   destinationLatitude?: number;
   destinationLongitude?: number;
+  Mariachilatitude?: number;
+  Mariachilongitude?: number;
   selectedMariachi?: number | null;
   onMapReady?: () => void;
 }

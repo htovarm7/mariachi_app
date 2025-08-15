@@ -1,7 +1,5 @@
 import { Mariachi, MarkerData } from "@/types/type";
 
-const directionsAPI = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
-
 export const generateMarkersFromData = ({
   data,
   destinationLatitude,
@@ -12,13 +10,13 @@ export const generateMarkersFromData = ({
   destinationLongitude: number;
 }): MarkerData[] => {
   return data.map((mariachi) => {
-    const latOffset = (Math.random() - 0.5) * 0.01;
-    const lngOffset = (Math.random() - 0.5) * 0.01;
+    const mariachiLat = mariachi.mariachilatitude || destinationLatitude;
+    const mariachiLng = mariachi.mariachilongitude || destinationLongitude;
 
     return {
       id: mariachi.mariachi_id,
-      latitude: destinationLatitude + latOffset,
-      longitude: destinationLongitude + lngOffset,
+      Mariachilatitude: mariachiLat,
+      Mariachilongitude: mariachiLng,
       members: mariachi.members,
       profile_image_url: mariachi.profile_image_url,
       rating: mariachi.rating,
@@ -28,26 +26,61 @@ export const generateMarkersFromData = ({
 };
 
 export const calculateRegion = ({
-  userLatitude,
-  userLongitude,
   destinationLatitude,
   destinationLongitude,
+  selectedMariachiLatitude,
+  selectedMariachiLongitude,
+  userLatitude,
+  userLongitude,
 }: {
-  userLatitude: number | null;
-  userLongitude: number | null;
   destinationLatitude?: number | null;
   destinationLongitude?: number | null;
+  selectedMariachiLatitude?: number | null;
+  selectedMariachiLongitude?: number | null;
+  userLatitude?: number | null;
+  userLongitude?: number | null;
 }) => {
-  if (!userLatitude || !userLongitude) {
+  if (
+    selectedMariachiLatitude &&
+    selectedMariachiLongitude &&
+    destinationLatitude &&
+    destinationLongitude
+  ) {
+    const latitudeDelta =
+      Math.abs(selectedMariachiLatitude - destinationLatitude) * 1.5 + 0.01;
+    const longitudeDelta =
+      Math.abs(selectedMariachiLongitude - destinationLongitude) * 1.5 + 0.01;
+
+    const latitude = (selectedMariachiLatitude + destinationLatitude) / 2;
+    const longitude = (selectedMariachiLongitude + destinationLongitude) / 2;
+
     return {
-      latitude: 37.78825,
-      longitude: -122.4324,
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    };
+  }
+
+  if (destinationLatitude && destinationLongitude) {
+    return {
+      latitude: destinationLatitude,
+      longitude: destinationLongitude,
       latitudeDelta: 0.01,
       longitudeDelta: 0.01,
     };
   }
 
-  if (!destinationLatitude || !destinationLongitude) {
+  if (selectedMariachiLatitude && selectedMariachiLongitude) {
+    return {
+      latitude: selectedMariachiLatitude,
+      longitude: selectedMariachiLongitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    };
+  }
+
+  if (userLatitude && userLongitude) {
     return {
       latitude: userLatitude,
       longitude: userLongitude,
@@ -56,21 +89,10 @@ export const calculateRegion = ({
     };
   }
 
-  const minLat = Math.min(userLatitude, destinationLatitude);
-  const maxLat = Math.max(userLatitude, destinationLatitude);
-  const minLng = Math.min(userLongitude, destinationLongitude);
-  const maxLng = Math.max(userLongitude, destinationLongitude);
-
-  const latitudeDelta = (maxLat - minLat) * 1.3;
-  const longitudeDelta = (maxLng - minLng) * 1.3;
-
-  const latitude = (userLatitude + destinationLatitude) / 2;
-  const longitude = (userLongitude + destinationLongitude) / 2;
-
   return {
-    latitude,
-    longitude,
-    latitudeDelta,
-    longitudeDelta,
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
   };
 };
