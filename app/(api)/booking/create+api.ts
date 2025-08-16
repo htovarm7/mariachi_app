@@ -11,6 +11,8 @@ export async function POST(request: Request) {
       payment_status,
       mariachi_id,
       user_id,
+      reserved_at,
+      serenade_time,
     } = body;
 
     if (
@@ -38,7 +40,9 @@ export async function POST(request: Request) {
           price, 
           payment_status, 
           mariachi_id, 
-          user_id
+          user_id,
+          reserved_at,
+          serenade_time
         ) VALUES (
           ${destination_address},
           ${destination_latitude},
@@ -46,7 +50,9 @@ export async function POST(request: Request) {
           ${price},
           ${payment_status},
           ${mariachi_id},
-          ${user_id}
+          ${user_id},
+          ${reserved_at || new Date().toISOString()},
+          ${serenade_time || 60}
         )
         RETURNING *;
         `;

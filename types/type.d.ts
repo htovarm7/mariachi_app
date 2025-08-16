@@ -96,6 +96,9 @@ declare interface PaymentProps {
   email: string;
   amount: string;
   mariachiId: number;
+  selectedMariachiData?: Mariachi;
+  selectedDate?: Date;
+  onDateChange?: (date: Date) => void;
 }
 
 declare interface LocationStore {
