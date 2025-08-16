@@ -66,8 +66,7 @@ const BookMariachi = () => {
   const selectedMariachiFromAPI = mariachisData?.find(
     (mariachi) => mariachi.id === selectedMariachi
   );
-  
-  
+
   if (!selectedMariachi || !selectedMariachiFromAPI) {
     return (
       <StripeProvider
@@ -97,7 +96,7 @@ const BookMariachi = () => {
       urlScheme="mariachiapp"
     >
       <MariachiLayout title="Book a Mariachi">
-        <>
+        <View className="p-4">
           <Text className="text-xl font-JakartaSemiBold mb-3">
             Mariachi Information
           </Text>
@@ -207,7 +206,7 @@ const BookMariachi = () => {
               0
             }
           />
-        </>
+        </View>
       </MariachiLayout>
     </StripeProvider>
   );
