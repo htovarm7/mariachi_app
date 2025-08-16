@@ -176,7 +176,7 @@ const Payment = ({
           }
         },
       },
-      returnURL: "myapp://book-ride",
+      returnURL: "myapp://book-mariachi",
     });
 
     if (!error) {
