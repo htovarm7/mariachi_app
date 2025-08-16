@@ -29,17 +29,41 @@ const ConfirmMariachi = () => {
         profile_image_url: mariachi.profile_image_url,
         members: mariachi.members,
         rating: mariachi.rating,
-        Mariachilatitude: mariachi.latitude,
-        Mariachilongitude: mariachi.longitude,
+        Mariachilatitude: mariachi.mariachilatitude,
+        Mariachilongitude: mariachi.mariachilongitude,
         price: mariachi.price,
-        serenadeTime: mariachi.serenata_time,
+        serenadeTime: mariachi.serenade_time,
       }));
       setMariachis(markerData);
     }
   }, [mariachisData, setMariachis]);
 
+  const selectedMariachiData = mariachis.find(
+    (mariachi) => mariachi.id === selectedMariachi
+  );
+
+  if (loading) {
+    return (
+      <MariachiLayout title="Choose a Mariachi" snapPoints={["65%", "85%"]}>
+        <View className="flex-1 justify-center items-center">
+          <Text>Loading mariachis...</Text>
+        </View>
+      </MariachiLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <MariachiLayout title="Choose a Mariachi" snapPoints={["65%", "85%"]}>
+        <View className="flex-1 justify-center items-center">
+          <Text>Error loading mariachis: {error}</Text>
+        </View>
+      </MariachiLayout>
+    );
+  }
+
   return (
-    <MariachiLayout title="Choose a Mariachi" snapPoints={["65%", "85%"]}>
+    <MariachiLayout title="Choose a Mariachi" snapPoints={["50%", "65%"]}>
       <FlatList
         data={mariachis}
         keyExtractor={(item, index) => index.toString()}
@@ -55,6 +79,7 @@ const ConfirmMariachi = () => {
             <CustomButton
               title="Select Mariachi"
               onPress={() => router.push("/(root)/book-mariachi")}
+              disabled={!selectedMariachiData}
             />
           </View>
         )}

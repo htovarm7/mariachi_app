@@ -50,14 +50,12 @@ const Map = () => {
 
   useEffect(() => {
     if (Array.isArray(mariachis)) {
-      console.log("Raw mariachis data:", mariachis);
       const newMarkers = generateMarkersFromData({
         data: mariachis,
         destinationLatitude: destinationLatitude ?? 0,
         destinationLongitude: destinationLongitude ?? 0,
       });
 
-      console.log("Generated markers:", newMarkers);
       setMarkers(newMarkers);
       setMariachis(newMarkers);
     }
@@ -74,17 +72,6 @@ const Map = () => {
     selectedMariachiLongitude: selectedMariachiData?.Mariachilongitude,
     userLatitude,
     userLongitude,
-  });
-
-  console.log("Map Debug:", {
-    selectedMariachi,
-    selectedMariachiData,
-    destinationLatitude,
-    destinationLongitude,
-    directionsAPI: directionsAPI ? "API Key Present" : "API Key Missing",
-    markersCount: markers.length,
-    mariachisFromAPI: mariachis?.length || 0,
-    mariachisData: mariachis,
   });
 
   if (loading)
@@ -127,20 +114,15 @@ const Map = () => {
                 : icons.marker
             }
             onPress={() => {
-              console.log("Marker pressed:", marker.id, marker.name);
-              // Toggle selección del mariachi
               if (selectedMariachi === marker.id) {
-                console.log("Deseleccionando mariachi:", marker.id);
-                clearSelectedMariachi(); // Deseleccionar si ya está seleccionado
+                clearSelectedMariachi();
               } else {
-                console.log("Seleccionando mariachi:", marker.id);
-                setSelectedMariachi(marker.id); // Seleccionar nuevo mariachi
+                setSelectedMariachi(marker.id);
               }
             }}
           />
         ))}
 
-        {/* Mostrar marcador de destino cuando hay destino */}
         {destinationLatitude && destinationLongitude && (
           <Marker
             key="destination-marker"
@@ -153,7 +135,6 @@ const Map = () => {
           />
         )}
 
-        {/* Mostrar direcciones solo cuando hay mariachi seleccionado */}
         {destinationLatitude &&
           destinationLongitude &&
           selectedMariachiData &&
@@ -178,12 +159,6 @@ const Map = () => {
               apikey={directionsAPI}
               strokeColor="#0286FF"
               strokeWidth={2}
-              onError={(errorMessage) => {
-                console.log("MapViewDirections Error:", errorMessage);
-              }}
-              onReady={(result) => {
-                console.log("Route found:", result.distance, result.duration);
-              }}
             />
           )}
       </MapView>
