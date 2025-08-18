@@ -1,7 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ActivityIndicator, Image, Text } from "react-native";
+import { ActivityIndicator, Image, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { View } from "react-native-reanimated/lib/typescript/Animated";
 import { useFetch } from "@/lib/fetch";
 import { useUser } from "@clerk/clerk-expo";
 import { images } from "@/constants";

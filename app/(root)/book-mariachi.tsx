@@ -4,7 +4,6 @@ import { useLocalSearchParams } from "expo-router";
 import { StripeProvider } from "@/lib/stripe";
 
 import MariachiLayout from "@/components/mariachiLayout";
-import { icons } from "@/constants";
 import { useLocationStore, useMariachiStore } from "@/store";
 import Payment from "@/components/payment";
 import { useEffect, useState } from "react";

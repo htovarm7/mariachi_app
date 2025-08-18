@@ -1,6 +1,5 @@
 import CustomButton from "@/components/customButton";
 import GroupMariachiCard from "@/components/groupMariachiCard";
-import MariachiCard from "@/components/mariachiCard";
 import MariachiLayout from "@/components/mariachiLayout";
 import { useFetch } from "@/lib/fetch";
 import { useMariachiStore } from "@/store";
