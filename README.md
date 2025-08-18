@@ -12,7 +12,16 @@ Mariachi App is a web application designed to help users manage mariachi events,
 
 ## 📸 Screenshots
 
-- TODO
+- ### Sign Up
+  ![Sign Up](assets/previews/sign-Up.PNG)
+- ### Sign In
+  ![Sign In](assets/previews/sign-In.PNG)
+- ### Home
+  ![Home](assets/previews/home.PNG)
+- ### Google Autocomplete
+  ![Autocomplete](assets/previews/autocomplete.PNG)
+- ### Recent Books
+  ![Recent Books](assets/previews/recent-books.PNG)
 
 ## Built With 🛠
 

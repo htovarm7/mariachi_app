@@ -15,110 +15,9 @@ import Map from "@/components/map";
 import { useLocationStore } from "@/store";
 import { useEffect, useState } from "react";
 import * as Location from "expo-location";
+import * as Calendar from "expo-calendar";
 import { router } from "expo-router";
-
-const recent_books = [
-  {
-    serenade_id: "1",
-    origin_address: "Coyoacán, Ciudad de México",
-    origin_latitude: 19.35529,
-    origin_longitude: -99.16207,
-    destination_address: "Santa Fe, Ciudad de México",
-    destination_latitude: 19.3032,
-    destination_longitude: -99.2106,
-    serenata_time: 45,
-    price: 3500.0,
-    payment_status: "paid",
-    mariachi_id: 2,
-    user_id: "1",
-    user_email: "user@example.com",
-    created_at: "2025-08-02 20:35:12",
-    mariachi: {
-      mariachi_id: "2",
-      name: "Mariachi Los Dorados",
-      lead_singer: "Carlos Rivera",
-      profile_image_url: "",
-      group_image_url: "",
-      members: 7,
-      rating: "4.85",
-    },
-  },
-  {
-    serenade_id: "2",
-    origin_address: "Centro Histórico, Guadalajara",
-    origin_latitude: 20.6736,
-    origin_longitude: -103.344,
-    destination_address: "Zapopan, Jalisco",
-    destination_latitude: 20.7236,
-    destination_longitude: -103.3848,
-    serenata_time: 60,
-    price: 4200.0,
-    payment_status: "paid",
-    mariachi_id: 1,
-    user_id: "1",
-    user_email: "user@example.com",
-    created_at: "2025-08-02 21:15:47",
-    mariachi: {
-      mariachi_id: "1",
-      name: "Mariachi Sol de México",
-      lead_singer: "José Hernández",
-      profile_image_url: "",
-      group_image_url: "",
-      members: 6,
-      rating: "4.90",
-    },
-  },
-  {
-    serenade_id: "3",
-    origin_address: "Colonia Roma, CDMX",
-    origin_latitude: 19.4164,
-    origin_longitude: -99.1622,
-    destination_address: "Polanco, CDMX",
-    destination_latitude: 19.4326,
-    destination_longitude: -99.197,
-    serenata_time: 30,
-    price: 2800.0,
-    payment_status: "paid",
-    mariachi_id: 1,
-    user_id: "1",
-    user_email: "user@example.com",
-    created_at: "2025-08-03 09:02:11",
-    mariachi: {
-      mariachi_id: "1",
-      name: "Mariachi Sol de México",
-      lead_singer: "José Hernández",
-      profile_image_url: "",
-      group_image_url: "",
-      members: 6,
-      rating: "4.90",
-    },
-  },
-  {
-    serenade_id: "4",
-    origin_address: "San Pedro Garza García, NL",
-    origin_latitude: 25.6508,
-    origin_longitude: -100.4044,
-    destination_address: "Monterrey Centro, NL",
-    destination_latitude: 25.6866,
-    destination_longitude: -100.3161,
-    serenata_time: 40,
-    price: 3100.0,
-    payment_status: "paid",
-    mariachi_id: 3,
-    user_id: "1",
-    user_email: "user@example.com",
-    created_at: "2025-08-03 11:20:34",
-    mariachi: {
-      mariachi_id: "3",
-      name: "Mariachi Viva México",
-      lead_singer: "Alejandro López",
-      profile_image_url: "",
-      group_image_url: "",
-      members: 5,
-      rating: "4.70",
-    },
-  },
-];
+import { useFetch } from "@/lib/fetch";
 
 const Home = () => {
   const {
@@ -129,8 +28,10 @@ const Home = () => {
   } = useLocationStore();
   const { user } = useUser();
   const { signOut } = useAuth();
-  const loading = false;
 
+  const { data: recent_books, loading } = useFetch(
+    user?.id ? `/(api)/booking/${user.id}` : ""
+  );
   const [hasPermissions, setHasPermission] = useState<boolean>(false);
 
   const handleSignOut = () => {
@@ -144,7 +45,7 @@ const Home = () => {
     address: string;
   }) => {
     setDestinationLocation(location);
-    router.push("/(root)/select-mariachi");
+    router.push("/(root)/confirm-mariachi");
   };
 
   useEffect(() => {
@@ -175,10 +76,21 @@ const Home = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await Calendar.requestCalendarPermissionsAsync();
+      if (status === "granted") {
+        const calendars = await Calendar.getCalendarsAsync(
+          Calendar.EntityTypes.EVENT
+        );
+      }
+    })();
+  }, []);
+
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
-        data={recent_books?.slice(0, 5)}
+        data={Array.isArray(recent_books) ? recent_books.slice(0, 5) : []}
         renderItem={({ item }) => <MariachiCard Booking={item} />}
         keyExtractor={(item, index) => index.toString()}
         className="px-5"

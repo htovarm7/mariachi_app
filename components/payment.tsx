@@ -1,9 +1,19 @@
 import { useAuth } from "@clerk/clerk-expo";
-import { useStripe } from "@stripe/stripe-react-native";
+import { useStripe } from "@/lib/stripe";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import { Alert, Image, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Text,
+  View,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import { ReactNativeModal } from "react-native-modal";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 
 import CustomButton from "@/components/customButton";
 import { icons, images } from "@/constants";
@@ -11,15 +21,78 @@ import { fetchAPI } from "@/lib/fetch";
 import { useLocationStore } from "@/store";
 import { PaymentProps } from "@/types/type";
 
-const Payment = ({ fullName, email, amount, mariachiId }: PaymentProps) => {
+const Payment = ({
+  fullName,
+  email,
+  amount,
+  mariachiId,
+  selectedMariachiData,
+  selectedDate = new Date(),
+  onDateChange,
+}: PaymentProps) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const { destinationLatitude, destinationAddress, destinationLongitude } =
     useLocationStore();
 
   const { userId } = useAuth();
   const [success, setSuccess] = useState<boolean>(false);
+  const [date, setDate] = useState<Date>(selectedDate);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
+    if (event.type === "set" && selectedDate) {
+      setDate(selectedDate);
+      if (onDateChange) {
+        onDateChange(selectedDate);
+      }
+    }
+    setShowDatePicker(false);
+    setShowTimePicker(false);
+  };
 
   const openPaymentSheet = async () => {
+    if (Platform.OS === "web") {
+      Alert.alert(
+        "Payment Simulation",
+        "On web, payment is simulated. In production, integrate with Stripe Web SDK.",
+        [
+          {
+            text: "Simulate Success",
+            onPress: async () => {
+              try {
+                await fetchAPI("/(api)/booking/create", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    destination_address: destinationAddress,
+                    destination_latitude: destinationLatitude,
+                    destination_longitude: destinationLongitude,
+                    price: parseInt(amount) * 100,
+                    payment_status: "paid",
+                    mariachi_id: mariachiId,
+                    user_id: userId,
+                    reserved_at: date.toISOString(),
+                    serenade_time: selectedMariachiData?.serenade_time || 60,
+                  }),
+                });
+                setSuccess(true);
+              } catch (error) {
+                Alert.alert("Error", "Failed to create booking");
+              }
+            },
+          },
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+        ]
+      );
+      return;
+    }
+
     await initializePaymentSheet();
 
     const { error } = await presentPaymentSheet();
@@ -32,6 +105,8 @@ const Payment = ({ fullName, email, amount, mariachiId }: PaymentProps) => {
   };
 
   const initializePaymentSheet = async () => {
+    if (Platform.OS === "web") return;
+
     const { error } = await initPaymentSheet({
       merchantDisplayName: "Example, Inc.",
       intentConfiguration: {
@@ -40,9 +115,9 @@ const Payment = ({ fullName, email, amount, mariachiId }: PaymentProps) => {
           currencyCode: "usd",
         },
         confirmHandler: async (
-          paymentMethod,
-          shouldSavePaymentMethod,
-          intentCreationCallback
+          paymentMethod: any,
+          shouldSavePaymentMethod: any,
+          intentCreationCallback: any
         ) => {
           const { paymentIntent, customer } = await fetchAPI(
             "/(api)/(stripe)/create",
@@ -75,7 +150,7 @@ const Payment = ({ fullName, email, amount, mariachiId }: PaymentProps) => {
             });
 
             if (result.client_secret) {
-              await fetchAPI("/(api)/ride/create", {
+              await fetchAPI("/(api)/booking/create", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -86,8 +161,11 @@ const Payment = ({ fullName, email, amount, mariachiId }: PaymentProps) => {
                   destination_longitude: destinationLongitude,
                   price: parseInt(amount) * 100,
                   payment_status: "paid",
-                  mariachiId: mariachiId,
+                  mariachi_id: mariachiId,
                   user_id: userId,
+                  created_at: new Date().toISOString(),
+                  reserved_at: date.toISOString(),
+                  serenade_duration: selectedMariachiData?.serenade_time || 60,
                 }),
               });
 
@@ -98,7 +176,7 @@ const Payment = ({ fullName, email, amount, mariachiId }: PaymentProps) => {
           }
         },
       },
-      returnURL: "myapp://book-ride",
+      returnURL: "myapp://book-mariachi",
     });
 
     if (!error) {
@@ -108,8 +186,119 @@ const Payment = ({ fullName, email, amount, mariachiId }: PaymentProps) => {
 
   return (
     <>
+      {/* Mariachi Information Section */}
+      {selectedMariachiData && (
+        <View className="p-4 mb-4">
+          <Text className="text-xl font-JakartaSemiBold mb-3">
+            Mariachi Selected
+          </Text>
+
+          <View className="flex flex-col w-full items-center justify-center mt-4">
+            <Image
+              source={{
+                uri:
+                  selectedMariachiData.profile_image_url ||
+                  "https://via.placeholder.com/150",
+              }}
+              className="w-28 h-28 rounded-full"
+            />
+
+            <View className="flex flex-row items-center justify-center mt-5 space-x-2">
+              <Text className="text-lg font-JakartaSemiBold">
+                {selectedMariachiData.name}
+              </Text>
+
+              <View className="flex flex-row items-center space-x-0.5">
+                <Image
+                  source={icons.star}
+                  className="w-5 h-5"
+                  resizeMode="contain"
+                />
+                <Text className="text-lg font-JakartaRegular">
+                  {selectedMariachiData.rating}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          <View className="flex flex-col w-full items-start justify-center py-3 px-5 rounded-3xl bg-general-600 mt-5">
+            <View className="flex flex-row items-center justify-between w-full border-b border-white py-3">
+              <Text className="text-lg font-JakartaRegular">
+                Serenade Price
+              </Text>
+              <Text className="text-lg font-JakartaRegular text-[#0CC25F]">
+                ${selectedMariachiData.price}
+              </Text>
+            </View>
+
+            <View className="flex flex-row items-center justify-between w-full py-3">
+              <Text className="text-lg font-JakartaRegular">Members</Text>
+              <Text className="text-lg font-JakartaRegular">
+                {selectedMariachiData.members}
+              </Text>
+            </View>
+
+            <View className="flex flex-row items-center justify-between w-full border-t border-white py-3">
+              <Text className="text-lg font-JakartaRegular">Duration</Text>
+              <Text className="text-lg font-JakartaRegular">
+                {selectedMariachiData.serenade_time} min
+              </Text>
+            </View>
+          </View>
+
+          <View className="flex flex-col w-full items-start justify-center mt-5">
+            <View className="flex flex-row items-center justify-start mt-3 border-t border-b border-general-700 w-full py-3">
+              <Image source={icons.to} className="w-6 h-6" />
+              <Text className="text-lg font-JakartaRegular ml-2">
+                {destinationAddress}
+              </Text>
+            </View>
+          </View>
+
+          <View className="flex flex-col w-full items-start justify-center mt-5 space-y-4">
+            <Text className="text-xl font-JakartaBold">
+              Fecha y hora de la serenata
+            </Text>
+
+            <View className="flex flex-row items-center justify-between w-full">
+              <View className="flex-1 mr-2">
+                <Text className="text-lg font-JakartaRegular mb-2">Fecha:</Text>
+                <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+                  <Text className="text-lg font-JakartaMedium p-3 bg-general-600 rounded-xl">
+                    {date.toLocaleDateString()}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View className="flex-1 ml-2">
+                <Text className="text-lg font-JakartaRegular mb-2">Hora:</Text>
+                <TouchableOpacity onPress={() => setShowTimePicker(true)}>
+                  <Text className="text-lg font-JakartaMedium p-3 bg-general-600 rounded-xl">
+                    {date.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {(showDatePicker || showTimePicker) && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={showDatePicker ? "date" : "time"}
+                is24Hour={true}
+                onChange={onChange}
+                minimumDate={new Date()}
+              />
+            )}
+          </View>
+        </View>
+      )}
+
       <CustomButton
-        title="Confirm Ride"
+        title="Confirm Booking"
         className="my-10"
         onPress={openPaymentSheet}
       />

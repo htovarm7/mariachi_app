@@ -8,7 +8,23 @@ import { useFetch } from "@/lib/fetch";
 import { icons } from "@/constants";
 import MapViewDirections from "react-native-maps-directions";
 
-const directionsAPI = process.env.EXPO_PUBLIC_PLACES_API_KEY;
+const directionsAPI = process.env.EXPO_PUBLIC_DIRECTIONS_API_KEY;
+
+// Helper function to validate coordinates
+const isValidCoordinate = (lat: number, lng: number): boolean => {
+  return (
+    !isNaN(lat) &&
+    !isNaN(lng) &&
+    isFinite(lat) &&
+    isFinite(lng) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    lng >= -180 &&
+    lng <= 180 &&
+    lat !== 0 &&
+    lng !== 0
+  );
+};
 
 const Map = () => {
   const {
@@ -17,7 +33,13 @@ const Map = () => {
     userLatitude,
     userLongitude,
   } = useLocationStore();
-  const { selectedMariachi, setMariachis } = useMariachiStore();
+  const {
+    selectedMariachi,
+    setMariachis,
+    setSelectedMariachi,
+    clearSelectedMariachi,
+    mariachis: storedMariachis,
+  } = useMariachiStore();
 
   const {
     data: mariachis,
@@ -35,17 +57,24 @@ const Map = () => {
       });
 
       setMarkers(newMarkers);
+      setMariachis(newMarkers);
     }
-  }, [mariachis, destinationLatitude, destinationLongitude]);
+  }, [mariachis, destinationLatitude, destinationLongitude, setMariachis]);
+
+  const selectedMariachiData = storedMariachis.find(
+    (mariachi) => mariachi.id === selectedMariachi
+  );
 
   const region = calculateRegion({
-    userLatitude,
-    userLongitude,
     destinationLatitude,
     destinationLongitude,
+    selectedMariachiLatitude: selectedMariachiData?.Mariachilatitude,
+    selectedMariachiLongitude: selectedMariachiData?.Mariachilongitude,
+    userLatitude,
+    userLongitude,
   });
 
-  if (loading || (!userLatitude && !userLongitude))
+  if (loading)
     return (
       <View className="flex justify-between items-center w-full">
         <ActivityIndicator size="small" color="#000" />
@@ -75,45 +104,63 @@ const Map = () => {
           <Marker
             key={`mariachi-${marker.id || index}`}
             coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude,
+              latitude: marker.Mariachilatitude,
+              longitude: marker.Mariachilongitude,
             }}
             title={marker.name}
             image={
-              selectedMariachi === +marker.id
+              selectedMariachi === marker.id
                 ? icons.selectedMarker
                 : icons.marker
             }
+            onPress={() => {
+              if (selectedMariachi === marker.id) {
+                clearSelectedMariachi();
+              } else {
+                setSelectedMariachi(marker.id);
+              }
+            }}
           />
         ))}
 
         {destinationLatitude && destinationLongitude && (
-          <>
-            <Marker
-              key="destination-marker"
-              coordinate={{
-                latitude: destinationLatitude,
-                longitude: destinationLongitude,
-              }}
-              title="Destination"
-              image={icons.pin}
-            />
+          <Marker
+            key="destination-marker"
+            coordinate={{
+              latitude: destinationLatitude,
+              longitude: destinationLongitude,
+            }}
+            title="Destino"
+            image={icons.pin}
+          />
+        )}
+
+        {destinationLatitude &&
+          destinationLongitude &&
+          selectedMariachiData &&
+          selectedMariachiData.Mariachilatitude &&
+          selectedMariachiData.Mariachilongitude &&
+          directionsAPI &&
+          isValidCoordinate(
+            selectedMariachiData.Mariachilatitude,
+            selectedMariachiData.Mariachilongitude
+          ) &&
+          isValidCoordinate(destinationLatitude, destinationLongitude) && (
             <MapViewDirections
               key="directions"
               origin={{
-                latitude: userLatitude!,
-                longitude: userLongitude!,
+                latitude: selectedMariachiData.Mariachilatitude,
+                longitude: selectedMariachiData.Mariachilongitude,
               }}
               destination={{
                 latitude: destinationLatitude,
                 longitude: destinationLongitude,
               }}
-              apikey={directionsAPI!}
+              apikey={directionsAPI}
               strokeColor="#0286FF"
               strokeWidth={2}
             />
-          </>
-        )}
+          )}
       </MapView>
     </View>
   );

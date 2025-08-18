@@ -44,9 +44,7 @@ const MariachiLayout = ({
           snapPoints={snapPoints || ["40%", "85%"]}
           index={0}
         >
-          <BottomSheetView style={{ flex: 1, padding: 20 }}>
-            {children}
-          </BottomSheetView>
+          <BottomSheetView style={{ flex: 1 }}>{children}</BottomSheetView>
         </BottomSheet>
       </View>
     </GestureHandlerRootView>

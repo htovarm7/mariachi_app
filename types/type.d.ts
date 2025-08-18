@@ -1,27 +1,39 @@
 import { TextInputProps, TouchableOpacityProps } from "react-native";
 
+// Interface for the mariachi
 declare interface Mariachi {
+  id: number;
   mariachi_id: number;
   name: string;
   profile_image_url: string;
   members: number;
   rating: number;
+  serenade_time: number;
+  price: number;
+  mariachilatitude: number;
+  mariachilongitude: number;
 }
 
+// Data that will appear on the map
 declare interface MarkerData {
-  latitude: number;
-  longitude: number;
+  Mariachilatitude: number;
+  Mariachilongitude: number;
   id: number;
+  mariachi_id?: number;
   members: number;
   profile_image_url: string;
   rating: number;
   name: string;
   price?: number;
+  serenadeTime?: number;
 }
 
+// Props for the map component
 declare interface MapProps {
   destinationLatitude?: number;
   destinationLongitude?: number;
+  Mariachilatitude?: number;
+  Mariachilongitude?: number;
   selectedMariachi?: number | null;
   onMapReady?: () => void;
 }
@@ -36,6 +48,7 @@ declare interface Booking {
   mariachi_id: number;
   user_email: string;
   created_at: string;
+  reserved_at: string;
   mariachi: {
     name: string;
     members: number;
@@ -83,6 +96,9 @@ declare interface PaymentProps {
   email: string;
   amount: string;
   mariachiId: number;
+  selectedMariachiData?: Mariachi;
+  selectedDate?: Date;
+  onDateChange?: (date: Date) => void;
 }
 
 declare interface LocationStore {
