@@ -15,6 +15,7 @@ export async function GET(request: Request, { id }: { id: string }) {
             bookings.price,
             bookings.payment_status,
             bookings.created_at,
+            bookings.reserved_at,
             'mariachi', json_build_object(
                 'mariachi_id', mariachi.id,
                 'name', mariachis.name,
