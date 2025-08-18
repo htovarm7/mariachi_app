@@ -9,7 +9,7 @@ import { Booking } from "@/types/type";
 import MariachiCard from "@/components/mariachiCard";
 
 const { user } = useUser();
-const { recent_books, loading } = useFetch<Booking[]>(
+const { data: recent_books, loading } = useFetch<Booking[]>(
   user?.id ? `/(api)/booking/${user.id}` : ""
 );
 

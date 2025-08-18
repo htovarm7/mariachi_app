@@ -29,7 +29,7 @@ const Home = () => {
   const { user } = useUser();
   const { signOut } = useAuth();
 
-  const { recent_books, loading } = useFetch(
+  const { data: recent_books, loading } = useFetch(
     user?.id ? `/(api)/booking/${user.id}` : ""
   );
   const [hasPermissions, setHasPermission] = useState<boolean>(false);
