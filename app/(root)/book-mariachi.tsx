@@ -1,17 +1,14 @@
 import { useUser } from "@clerk/clerk-expo";
-import { Image, Text, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { Text, View } from "react-native";
 import { StripeProvider } from "@/lib/stripe";
 
 import MariachiLayout from "@/components/mariachiLayout";
-import { icons } from "@/constants";
 import { useLocationStore, useMariachiStore } from "@/store";
 import Payment from "@/components/payment";
 import { useEffect, useState } from "react";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
-import { Platform } from "react-native";
 import { useFetch } from "@/lib/fetch";
 import { Mariachi } from "@/types/type";
 
