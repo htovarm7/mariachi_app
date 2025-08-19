@@ -42,7 +42,7 @@ declare interface Booking {
   destination_address: string;
   destination_latitude: number;
   destination_longitude: number;
-  serenata_time: number;
+  serenade_duration: number;
   price: number;
   payment_status: string;
   mariachi_id: number;

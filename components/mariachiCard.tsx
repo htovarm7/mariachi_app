@@ -12,7 +12,8 @@ const MariachiCard = ({
     created_at,
     mariachi,
     payment_status,
-    serenata_time,
+    serenade_duration,
+    reserved_at,
   },
 }: {
   Booking: Booking;
@@ -42,10 +43,19 @@ const MariachiCard = ({
         <View className="flex flex-col w-full mt-5 bg-general-500 rounded-lg p-3 items-start justify-center">
           <View className="flex flex-row items-center w-full justify-between mb-5">
             <Text className="text-md font-FunnelSansMedium text-gray-500">
-              Date & Time
+              Reserved At
             </Text>
             <Text className="text-md font-FunnelSansMedium text-gray-500">
-              {formatDate(created_at)}, {formatTime(serenata_time)}
+              {formatDate(reserved_at)}
+            </Text>
+          </View>
+
+          <View className="flex flex-row items-center w-full justify-between mb-5">
+            <Text className="text-md font-FunnelSansMedium text-gray-500">
+              Serenade duration
+            </Text>
+            <Text className="text-md font-FunnelSansMedium text-gray-500">
+              {formatTime(serenade_duration)}
             </Text>
           </View>
 
