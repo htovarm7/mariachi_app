@@ -8,29 +8,31 @@ export async function GET(request: Request, { id }: { id: string }) {
     const sql = neon(`${process.env.DATABASE_URL}`);
     const response = await sql`
         SELECT
-            bookings.mariachi_id,
+            bookings.booking_id,
             bookings.destination_address,
             bookings.destination_latitude,
             bookings.destination_longitude,
+            bookings.serenade_duration,
             bookings.price,
             bookings.payment_status,
             bookings.created_at,
-            'mariachi', json_build_object(
-                'mariachi_id', mariachi.id,
-                'name', mariachis.name,
-                'profile_image_url', mariachis.profile_image_url,
-                'members', mariachis.members,
-                'rating', mariachis.rating
-            ) AS mariachi 
+            bookings.reserved_at,
+            json_build_object(
+                'mariachi_id', m.id,
+                'name', m.name,
+                'profile_image_url', m.profile_image_url,
+                'members', m.members,
+                'rating', m.rating
+            ) AS mariachi
         FROM 
             bookings
         INNER JOIN
-            mariachis ON bookings.mariachi_id = mariachi.id
+            mariachis m ON bookings.mariachi_id = m.id
         WHERE 
             bookings.user_id = ${id}
         ORDER BY 
             bookings.created_at DESC;
-        `;
+    `;
 
     return Response.json({ data: response });
   } catch (error) {
