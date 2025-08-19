@@ -91,7 +91,7 @@ const Home = () => {
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
-        data={recent_books?.slice(0, 5)}
+        data={Array.isArray(recent_books) ? recent_books : []}
         renderItem={({ item }) => <MariachiCard Booking={item} />}
         keyExtractor={(item, index) => index.toString()}
         className="px-5"
