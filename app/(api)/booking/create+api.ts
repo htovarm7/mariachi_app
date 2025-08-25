@@ -12,7 +12,7 @@ export async function POST(request: Request) {
       mariachi_id,
       user_id,
       reserved_at,
-      serenade_time,
+      serenade_duration,
     } = body;
 
     if (
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
           ${mariachi_id},
           ${user_id},
           ${reserved_at || new Date().toISOString()},
-          ${serenade_time || 60}
+          ${serenade_duration || 60}
         )
         RETURNING *;
         `;

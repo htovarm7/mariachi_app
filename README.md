@@ -12,16 +12,27 @@ Mariachi App is a web application designed to help users manage mariachi events,
 
 ## 📸 Screenshots
 
+- ### Onboarding
+  <img src="assets/previews/OnBoarding1.PNG" alt="OnBoarding1" width="320" height="720"/>
+  <img src="assets/previews/OnBoarding2.PNG" alt="OnBoarding2" width="320" height="720"/>
+  <img src="assets/previews/OnBoarding3.PNG" alt="OnBoarding3" width="320" height="720"/>
 - ### Sign Up
-  ![Sign Up](assets/previews/sign-Up.PNG)
+  <img src="assets/previews/sign-Up.PNG" alt="Sign Up" width="320" height="720"/>
 - ### Sign In
-  ![Sign In](assets/previews/sign-In.PNG)
+  <img src="assets/previews/sign-In.PNG" alt="Sign In" width="320" height="720"/>
 - ### Home
-  ![Home](assets/previews/home.PNG)
+  <img src="assets/previews/Home.PNG" alt="Home" width="320" height="720"/>
 - ### Google Autocomplete
-  ![Autocomplete](assets/previews/autocomplete.PNG)
-- ### Recent Books
-  ![Recent Books](assets/previews/recent-books.PNG)
+  <img src="assets/previews/Autocomplete.PNG" alt="autocomplete" width="320" height="720"/>
+- ### Choose Mariachi
+  <img src="assets/previews/Choose.PNG" alt="Choose" width="320" height="720"/>
+- ### Making the book
+  <img src="assets/previews/Booking.PNG" alt="Booking" width="320" height="720"/>
+- ### Payment
+  <img src="assets/previews/Payment.PNG" alt="Payment" width="320" height="720"/>
+  <img src="assets/previews/Payment-success.PNG" alt="PaymentSuccess" width="320" height="720"/>
+- ### After Payment
+  <img src="assets/previews/after-payment.PNG" alt="Booking" width="320" height="720"/>
 
 ## Built With 🛠
 
@@ -53,3 +64,8 @@ npx expo start
 ```
 
 Follow the instructions in the terminal to open the app on an emulator or your device.
+
+## Disclaimer
+
+All images included in this project were generated using Artificial Intelligence (AI) tools.  
+They are not real photographs and are intended solely for illustrative purposes.

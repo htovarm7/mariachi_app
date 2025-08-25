@@ -30,8 +30,9 @@ const Home = () => {
   const { signOut } = useAuth();
 
   const { data: recent_books, loading } = useFetch(
-    user?.id ? `/(api)/booking/${user.id}` : ""
+    `/(api)/booking/${user?.id}`
   );
+
   const [hasPermissions, setHasPermission] = useState<boolean>(false);
 
   const handleSignOut = () => {
@@ -90,7 +91,7 @@ const Home = () => {
   return (
     <SafeAreaView className="bg-general-500">
       <FlatList
-        data={Array.isArray(recent_books) ? recent_books.slice(0, 5) : []}
+        data={Array.isArray(recent_books) ? recent_books : []}
         renderItem={({ item }) => <MariachiCard Booking={item} />}
         keyExtractor={(item, index) => index.toString()}
         className="px-5"
