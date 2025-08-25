@@ -21,9 +21,9 @@ Mariachi App is a web application designed to help users manage mariachi events,
 - ### Sign In
   <img src="assets/previews/sign-In.PNG" alt="Sign In" width="320" height="720"/>
 - ### Home
-  <img src="assets/previews/Home.PNG" alt="Home" width="320" height="720"/>
+  <img src="assets/previews/home.PNG" alt="Home" width="320" height="720"/>
 - ### Google Autocomplete
-  <img src="assets/previews/Autocomplete.PNG" alt="autocomplete" width="320" height="720"/>
+  <img src="assets/previews/autocomplete.PNG" alt="autocomplete" width="320" height="720"/>
 - ### Choose Mariachi
   <img src="assets/previews/Choose.PNG" alt="Choose" width="320" height="720"/>
 - ### Making the book
