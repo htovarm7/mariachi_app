@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Image } from "expo-image";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { useRef } from "react";
@@ -35,11 +34,7 @@ function Onboarding() {
       >
         {onboarding.map((item) => (
           <View key={item.id} className="flex items-center justify-center p-5">
-            <Image
-              source={item.image}
-              className="w-full h-[300px]"
-              contentFit="contain"
-            />
+            <Image source={item.image} className="w-full h-[300px]" />
             <View className="flex flex-row items-center justify-center w-full mt-10">
               <Text className="text-black text-3xl font-bold mx-10 text-center">
                 {item.title}
