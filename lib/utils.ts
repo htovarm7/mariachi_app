@@ -2,8 +2,8 @@ import { Booking } from "@/types/type";
 
 export const sortBookings = (bookings: Booking[]): Booking[] => {
   const result = bookings.sort((a, b) => {
-    const dateA = new Date(`${a.created_at}T${a.serenata_time}`);
-    const dateB = new Date(`${b.created_at}T${b.serenata_time}`);
+    const dateA = new Date(`${a.created_at}T${a.serenade_duration}`);
+    const dateB = new Date(`${b.created_at}T${b.serenade_duration}`);
     return dateB.getTime() - dateA.getTime();
   });
 
