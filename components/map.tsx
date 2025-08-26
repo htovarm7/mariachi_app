@@ -10,7 +10,6 @@ import MapViewDirections from "react-native-maps-directions";
 
 const directionsAPI = process.env.EXPO_PUBLIC_DIRECTIONS_API_KEY;
 
-// Helper function to validate coordinates
 const isValidCoordinate = (lat: number, lng: number): boolean => {
   return (
     !isNaN(lat) &&

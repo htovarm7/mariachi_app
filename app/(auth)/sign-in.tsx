@@ -31,7 +31,6 @@ const SignIn = () => {
         console.error(JSON.stringify(signInAttempt, null, 2));
       }
     } catch (err: any) {
-      //console.error(JSON.stringify(err, null, 2));
       let errorMessage = "Error al iniciar sesión";
 
       if (err.errors && err.errors.length > 0) {
@@ -96,8 +95,6 @@ const SignIn = () => {
             <Text className="text-primary-500"> Sign Up</Text>
           </Link>
         </View>
-
-        {/* Verifcation Mode*/}
       </View>
     </ScrollView>
   );
