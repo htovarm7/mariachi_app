@@ -186,7 +186,6 @@ const Payment = ({
 
   return (
     <>
-      {/* Mariachi Information Section */}
       {selectedMariachiData && (
         <View className="p-4 mb-4">
           <Text className="text-xl font-JakartaSemiBold mb-3">
